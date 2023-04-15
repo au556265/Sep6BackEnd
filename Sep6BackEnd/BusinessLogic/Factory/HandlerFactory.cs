@@ -17,7 +17,7 @@ namespace Sep6BackEnd.BusinessLogic
         
         public HelloWorldLogic HelloWorldLogic()
         {
-            //google "Lazy instantion" til rapport
+            //google "Lazy instantion" til rapport 123
             if (_helloWorldlogic is null)
                 _helloWorldlogic = new HelloWorldLogic(_iDataAccessFactory);
 

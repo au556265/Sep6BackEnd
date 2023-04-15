@@ -16,6 +16,7 @@ namespace Sep6BackEnd
 {
     public class Startup
     {
+        private readonly string SpecificOrigin = "_specificOrigin";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,6 +31,18 @@ namespace Sep6BackEnd
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Sep6BackEnd", Version = "v1"});
+            });
+
+            services.AddCors(cors =>
+            {
+                cors.AddPolicy(name:
+                    SpecificOrigin,
+                    builder =>
+                    {
+                        builder.AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowAnyOrigin();
+                    });
             });
         }
 
@@ -46,6 +59,7 @@ namespace Sep6BackEnd
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(SpecificOrigin);
 
             app.UseAuthorization();
 

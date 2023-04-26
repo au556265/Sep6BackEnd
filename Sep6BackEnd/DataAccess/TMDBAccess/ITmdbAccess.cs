@@ -15,5 +15,6 @@ namespace Sep6BackEnd.DataAccess.IMDBAccess
         public Task<List<Movie>> getMostPopularMovies();
 
         public Task<List<Actor>> getMostPopularActors();
+        public Task<Movie> getMovie(int id);
     }
 }

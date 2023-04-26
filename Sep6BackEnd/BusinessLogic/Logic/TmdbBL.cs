@@ -74,5 +74,10 @@ namespace Sep6BackEnd.BusinessLogic
             var weeklyPopularActors = _tmdbAccess.getMostPopularActors().Result;
             return weeklyPopularActors;
         }
+
+        public Movie GetMovie(int id)
+        {
+            return _tmdbAccess.getMovie(id).Result;
+        }
     }
 }

@@ -75,5 +75,13 @@ namespace Sep6BackEnd.DataAccess.IMDBAccess
             var data = JsonConvert.DeserializeObject<Actor.Root>(response);
             return data.results;
         }
+
+        public async Task<Movie> getMovie(int id)
+        {
+            string url = $"https://api.themoviedb.org/3/movie/{id}?api_key="+Keys._APIKEY+"&language=en-US";
+            string response = await client.GetStringAsync(url);
+            var data = JsonConvert.DeserializeObject<Movie>(response);
+            return data;
+        }
     }
 }

@@ -32,25 +32,32 @@ namespace Sep6BackEnd.Controllers
             return results;
         }
         
-        [HttpPost]
-        [Route("setFavoriteMovie/{userName}/{movieTitle}")]
-        public void SetFavoriteMovie([FromRoute] string userName, string movieTitle)
+        [HttpGet]
+        [Route("getFavoriteMovie/{userName}/{movieId}")]
+        public bool getFavoriteMovie([FromRoute] string userName, int movieId)
         {
-            _usersBl.SetFavoriteMovie(userName, movieTitle);
+            return _usersBl.GetFavoriteMovie(userName, movieId);
         }
         
         [HttpPost]
-        [Route("setMovieRating/{userName}/{movieTitle}/{rating}")]
-        public void SetMovieRating([FromRoute] string userName, string movieTitle, int rating)
+        [Route("setFavoriteMovie")]
+        public RatingObject SetFavoriteMovie([FromBody] RatingObject ratingObject)
         {
-            _usersBl.SetMovieRating(userName,movieTitle,rating);
+            return _usersBl.SetFavoriteMovie(ratingObject);
+        }
+        
+        [HttpPost]
+        [Route("setMovieRating")]
+        public RatingObject SetMovieRating([FromBody] RatingObject ratingObject)
+        {
+            return _usersBl.SetMovieRating(ratingObject);
         }
         
         [HttpGet]
-        [Route("getMovieRating/{userName}/{movieTitle}")]
-        public int GetMovieRating([FromRoute] string userName, string movieTitle)
+        [Route("getMovieRating/{userName}/{movieId}")]
+        public int GetMovieRating([FromRoute] string userName, int movieId)
         {
-           var rating = _usersBl.GetMovieRating(userName,movieTitle);
+           var rating = _usersBl.GetMovieRating(userName,movieId);
            return rating;
         }
     }

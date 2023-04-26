@@ -6,8 +6,9 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
     {
          User CreateUser(string userName, string email, string password);
          User Login(string userName, string password);
-         void SetFavoriteMovie(string userName, string movieTitle);
-         void SetMovieRating(string userName, string movieTitle, int rating);
-         int GetMovieRating(string userName, string movieTitle);
+         RatingObject SetFavoriteMovie(RatingObject ratingObject);
+         RatingObject SetMovieRating(RatingObject ratingObject);
+         int GetMovieRating(string userName, int movieId);
+         bool GetFavoriteMovie(string userName, int movieId);
     }
 }

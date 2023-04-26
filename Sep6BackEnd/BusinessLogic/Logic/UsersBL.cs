@@ -32,20 +32,25 @@ namespace Sep6BackEnd.BusinessLogic
             }
         }
 
-        public void SetFavoriteMovie(string userName, string movieTitle)
+        public RatingObject SetFavoriteMovie(RatingObject ratingObject)
         {
-            _databaseAccess.SetFavoriteMovie(userName, movieTitle);
+            return _databaseAccess.SetFavoriteMovie(ratingObject);
         }
 
-        public void SetMovieRating(string userName, string movieTitle, int rating)
+        public RatingObject SetMovieRating(RatingObject ratingObject)
         {
-            _databaseAccess.SetMovieRating(userName, movieTitle, rating);
+            return _databaseAccess.SetMovieRating(ratingObject);
         }
 
-        public int GetMovieRating(string userName, string movieTitle)
+        public int GetMovieRating(string userName, int movieId)
         {
-            var rating = _databaseAccess.GetMovieRating(userName, movieTitle);
+            var rating = _databaseAccess.GetMovieRating(userName, movieId);
             return rating;
+        }
+
+        public bool GetFavoriteMovie(string userName, int movieId)
+        {
+            return _databaseAccess.GetFavoriteMovie(userName, movieId);
         }
     }
 }

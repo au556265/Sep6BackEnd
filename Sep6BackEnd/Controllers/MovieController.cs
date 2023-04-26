@@ -21,13 +21,19 @@ namespace Sep6BackEnd.Controllers
         }
         
         [HttpGet]
-        [Route("getMovies/{name}")]
-        public  List<Movie> GetMovies( [FromRoute] string name)
+        [Route("get5MoviesBySearch/{name}")]
+        public  List<Movie> get5MoviesBySearch( [FromRoute] string name)
         {
             var results = _tmdbBl.GetTop5MoviesByTitle(name);
             return results;
         }
-        
+        [HttpGet]
+        [Route("getMovie/{id}")]
+        public  Movie GetMovie( [FromRoute] int id)
+        {
+            var results = _tmdbBl.GetMovie(id);
+            return results;
+        }
         [HttpGet]
         [Route("getMostPopularMovies")]
         public List<Movie> GetMostPopularMovies()

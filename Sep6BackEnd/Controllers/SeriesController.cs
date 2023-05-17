@@ -10,9 +10,9 @@ namespace Sep6BackEnd.Controllers
     {
         private TmdbBL _tmdbBl;
         
-        public SeriesController()
+        public SeriesController(TmdbBL _tmdbBl)
         {
-            _tmdbBl = new TmdbBL();
+            this._tmdbBl = _tmdbBl;
         }
         
         [HttpGet]

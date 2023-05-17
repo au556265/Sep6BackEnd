@@ -7,9 +7,9 @@ namespace Sep6BackEnd.BusinessLogic
     {
         private IDatabaseAccess _databaseAccess;
 
-        public UsersBL()
+        public UsersBL(DatabaseAccess databaseAccess)
         {
-            _databaseAccess = new DatabaseAccess();
+            _databaseAccess = databaseAccess;
         }
 
 

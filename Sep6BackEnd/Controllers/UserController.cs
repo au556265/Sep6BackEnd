@@ -11,9 +11,9 @@ namespace Sep6BackEnd.Controllers
     {
         private IUsersBL _usersBl;
         
-        public UserController()
+        public UserController(UsersBL _usersBl)
         {
-            _usersBl = new UsersBL();
+            this._usersBl = _usersBl;
         }
         
         [HttpPost]

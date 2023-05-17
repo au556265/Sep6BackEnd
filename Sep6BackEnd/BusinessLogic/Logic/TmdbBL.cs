@@ -8,9 +8,9 @@ namespace Sep6BackEnd.BusinessLogic
     {
         private ITmdbAccess _tmdbAccess;
 
-        public TmdbBL()
+        public TmdbBL(TmdbAccess tmdbAccess)
         {
-            _tmdbAccess = new TmdbAccess();
+            _tmdbAccess = tmdbAccess;
         }
 
 

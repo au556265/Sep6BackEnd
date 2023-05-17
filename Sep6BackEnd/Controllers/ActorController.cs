@@ -10,9 +10,9 @@ namespace Sep6BackEnd.Controllers
     {
         private TmdbBL _tmdbBl;
 
-        public ActorController()
+        public ActorController(TmdbBL _tmdbBl)
         {
-            _tmdbBl = new TmdbBL();
+            this._tmdbBl =_tmdbBl;
         }
         
         [HttpGet]

@@ -15,9 +15,9 @@ namespace Sep6BackEnd.Controllers
     {
         private TmdbBL _tmdbBl;
         
-        public MovieController()
+        public MovieController(TmdbBL _tmdbBl)
         {
-            _tmdbBl = new TmdbBL();
+            this._tmdbBl=_tmdbBl;
         }
         
         [HttpGet]

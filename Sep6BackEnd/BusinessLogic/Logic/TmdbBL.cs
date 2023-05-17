@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Sep6BackEnd.Controllers;
 using Sep6BackEnd.DataAccess.IMDBAccess;
+using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace Sep6BackEnd.BusinessLogic
 {

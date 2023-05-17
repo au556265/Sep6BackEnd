@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Sep6BackEnd.BusinessLogic;
 using Sep6BackEnd.DataAccess.DatabaseAccess;
 using Sep6BackEnd.DataAccess.IMDBAccess;
+using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace Sep6BackEnd
 {

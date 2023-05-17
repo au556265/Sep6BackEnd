@@ -3,8 +3,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sep6BackEnd.Controllers;
+using Sep6BackEnd.DataAccess.IMDBAccess;
 
-namespace Sep6BackEnd.DataAccess.IMDBAccess
+namespace Sep6BackEnd.DataAccess.TMDBAccess
 {
     public class TmdbAccess : ITmdbAccess
     {

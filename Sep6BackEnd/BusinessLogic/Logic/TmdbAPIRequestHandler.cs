@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using Sep6BackEnd.Controllers;
 using Sep6BackEnd.DataAccess.IMDBAccess;
+using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace Sep6BackEnd.BusinessLogic
 {
-    public class TmdbBL
+    public class TmdbAPIRequestHandler
     {
         private ITmdbAccess _tmdbAccess;
 
-        public TmdbBL()
+        public TmdbAPIRequestHandler(TmdbAccess tmdbAccess)
         {
-            _tmdbAccess = new TmdbAccess();
+            _tmdbAccess = tmdbAccess;
         }
 
 
@@ -78,6 +79,12 @@ namespace Sep6BackEnd.BusinessLogic
         public Movie GetMovie(int id)
         {
             return _tmdbAccess.getMovie(id).Result;
+        }
+
+        public List<Cast> GetActorsByMovie(int id)
+        {
+            var allCast = _tmdbAccess.getActorByMovie(id).Result;
+            return allCast;
         }
     }
 }

@@ -11,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Sep6BackEnd.BusinessLogic;
+using Sep6BackEnd.DataAccess.DatabaseAccess;
+using Sep6BackEnd.DataAccess.IMDBAccess;
+using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace Sep6BackEnd
 {
@@ -32,6 +36,12 @@ namespace Sep6BackEnd
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Sep6BackEnd", Version = "v1"});
             });
+
+            services.AddSingleton(new Keys(Configuration["APIKEY"], Configuration["DBSKEY"]));
+            services.AddScoped<TmdbAPIRequestHandler>();
+            services.AddScoped<TmdbAccess>();
+            services.AddScoped<UsersRequestHandler>();
+            services.AddScoped<DatabaseAccess>();
 
             services.AddCors(cors =>
             {

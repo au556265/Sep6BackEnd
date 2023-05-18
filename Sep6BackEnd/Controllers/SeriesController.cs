@@ -8,18 +8,18 @@ namespace Sep6BackEnd.Controllers
     [Route("[controller]")]
     public class SeriesController : ControllerBase
     {
-        private TmdbBL _tmdbBl;
+        private TmdbAPIRequestHandler _tmdbApiRequestHandler;
         
-        public SeriesController()
+        public SeriesController(TmdbAPIRequestHandler tmdbApiRequestHandler)
         {
-            _tmdbBl = new TmdbBL();
+            this._tmdbApiRequestHandler = tmdbApiRequestHandler;
         }
         
         [HttpGet]
         [Route("getMostPopularSeries")]
         public List<Series> GetMostPopularSeries()
         {
-            var results = _tmdbBl.GetMostPopularSeries();
+            var results = _tmdbApiRequestHandler.GetMostPopularSeries();
             return results;
         }
         

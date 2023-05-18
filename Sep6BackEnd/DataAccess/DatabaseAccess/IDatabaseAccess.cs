@@ -1,4 +1,6 @@
-﻿using Sep6BackEnd.Controllers;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Sep6BackEnd.Controllers;
 
 namespace Sep6BackEnd.DataAccess.DatabaseAccess
 {
@@ -10,5 +12,6 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
          RatingObject SetMovieRating(RatingObject ratingObject);
          int GetMovieRating(string userName, int movieId);
          bool GetFavoriteMovie(string userName, int movieId);
+         Task<IEnumerable<int>> GetAllMyFavoritesIds(string userName);
     }
 }

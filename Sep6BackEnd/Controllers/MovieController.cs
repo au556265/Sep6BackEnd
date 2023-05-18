@@ -13,34 +13,43 @@ namespace Sep6BackEnd.Controllers
     
     public class MovieController: ControllerBase
     {
-        private TmdbBL _tmdbBl;
+        private TmdbAPIRequestHandler _tmdbApiRequestHandler;
         
-        public MovieController()
+        public MovieController(TmdbAPIRequestHandler tmdbApiRequestHandler)
         {
-            _tmdbBl = new TmdbBL();
+            this._tmdbApiRequestHandler=tmdbApiRequestHandler;
         }
         
         [HttpGet]
         [Route("get5MoviesBySearch/{name}")]
         public  List<Movie> get5MoviesBySearch( [FromRoute] string name)
         {
-            var results = _tmdbBl.GetTop5MoviesByTitle(name);
+            var results = _tmdbApiRequestHandler.GetTop5MoviesByTitle(name);
             return results;
         }
         [HttpGet]
         [Route("getMovie/{id}")]
         public  Movie GetMovie( [FromRoute] int id)
         {
-            var results = _tmdbBl.GetMovie(id);
+            var results = _tmdbApiRequestHandler.GetMovie(id);
             return results;
         }
         [HttpGet]
         [Route("getMostPopularMovies")]
         public List<Movie> GetMostPopularMovies()
         {
-            var results = _tmdbBl.GetMostPopularMovies();
+            var results = _tmdbApiRequestHandler.GetMostPopularMovies();
             return results;
         }
-        
+
+        [HttpGet]
+        [Route("getActorsByMovie/{id}")]
+        public List<Cast> GetActorsByMovie(int id)
+        {
+            var results = _tmdbApiRequestHandler.GetActorsByMovie(id);
+            return results;
+        }
+
+
     }
 }

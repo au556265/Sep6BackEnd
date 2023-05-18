@@ -62,7 +62,7 @@ namespace Sep6BackEnd.BusinessLogic
 
         public async Task<IEnumerable<Movie>> GetAllMyFavoritesMovies(string userName)
         {
-            //start fetching favorite ids from local database
+            //start fetching favorite ids local database
             var myFavoriteMoviesIds = await _databaseAccess.GetAllMyFavoritesIds(userName);
             
             var myfavorites = new List<Movie>();

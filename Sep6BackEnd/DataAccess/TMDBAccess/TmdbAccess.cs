@@ -89,11 +89,6 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
 
         public async Task<List<Cast>> getActorByMovie(int MovieID)
         {
-            /*string url = $"https://api.themoviedb.org/3/movie/{MovieID}/credits?api_key="+keys.APIKEY+"&language=en-US";
-            string response = await client.GetStringAsync(url);
-            var data = JsonConvert.DeserializeObject<Cast.Root>(response);
-            return data.cast;*/
-            
             string url = $"https://api.themoviedb.org/3/movie/{MovieID}/credits?api_key="+keys.APIKEY+"&language=en-US";
             string response = await client.GetStringAsync(url);
             var data = JsonConvert.DeserializeObject<Cast.Root>(response);

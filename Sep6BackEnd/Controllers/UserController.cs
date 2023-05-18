@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sep6BackEnd.BusinessLogic;
 
@@ -9,18 +9,18 @@ namespace Sep6BackEnd.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private IUsersBL _usersBl;
+        private IUsersRequestHandler _usersRequestHandler;
         
-        public UserController(UsersBL _usersBl)
+        public UserController(UsersRequestHandler usersRequestHandler)
         {
-            this._usersBl = _usersBl;
+            this._usersRequestHandler = usersRequestHandler;
         }
         
         [HttpPost]
         [Route("postCreateUser/{userName}/{email}/{password}")]
         public User CreateUser([FromRoute] string userName, string email, string password)
         {
-            var results = _usersBl.CreateUser(userName, email, password);
+            var results = _usersRequestHandler.CreateUser(userName, email, password);
             return results;
         }
         
@@ -28,7 +28,7 @@ namespace Sep6BackEnd.Controllers
         [Route("login/{userName}/{password}")]
         public string Login([FromRoute] string userName, string password)
         {
-            var results = _usersBl.Login(userName, password);
+            var results = _usersRequestHandler.Login(userName, password);
             return results;
         }
         
@@ -36,29 +36,37 @@ namespace Sep6BackEnd.Controllers
         [Route("getFavoriteMovie/{userName}/{movieId}")]
         public bool getFavoriteMovie([FromRoute] string userName, int movieId)
         {
-            return _usersBl.GetFavoriteMovie(userName, movieId);
+            return _usersRequestHandler.GetFavoriteMovie(userName, movieId);
         }
         
         [HttpPost]
         [Route("setFavoriteMovie")]
         public RatingObject SetFavoriteMovie([FromBody] RatingObject ratingObject)
         {
-            return _usersBl.SetFavoriteMovie(ratingObject);
+            return _usersRequestHandler.SetFavoriteMovie(ratingObject);
         }
         
         [HttpPost]
         [Route("setMovieRating")]
         public RatingObject SetMovieRating([FromBody] RatingObject ratingObject)
         {
-            return _usersBl.SetMovieRating(ratingObject);
+            return _usersRequestHandler.SetMovieRating(ratingObject);
         }
         
         [HttpGet]
         [Route("getMovieRating/{userName}/{movieId}")]
         public int GetMovieRating([FromRoute] string userName, int movieId)
         {
-           var rating = _usersBl.GetMovieRating(userName,movieId);
+           var rating = _usersRequestHandler.GetMovieRating(userName,movieId);
            return rating;
+        }
+        
+        [HttpGet]
+        [Route("getAllMyFavoriteMovies/{userName}")]
+        public async Task<IEnumerable<Movie>> GetAllMyFavoritesMovies(string userName)
+        {
+            var results = await _usersRequestHandler.GetAllMyFavoritesMovies(userName);
+            return results;
         }
     }
 }

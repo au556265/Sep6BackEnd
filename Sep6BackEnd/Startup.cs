@@ -38,9 +38,9 @@ namespace Sep6BackEnd
             });
 
             services.AddSingleton(new Keys(Configuration["APIKEY"], Configuration["DBSKEY"]));
-            services.AddScoped<TmdbBL>();
+            services.AddScoped<TmdbAPIRequestHandler>();
             services.AddScoped<TmdbAccess>();
-            services.AddScoped<UsersBL>();
+            services.AddScoped<UsersRequestHandler>();
             services.AddScoped<DatabaseAccess>();
 
             services.AddCors(cors =>

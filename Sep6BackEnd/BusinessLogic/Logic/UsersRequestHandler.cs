@@ -1,15 +1,22 @@
-﻿using Sep6BackEnd.Controllers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Sep6BackEnd.Controllers;
 using Sep6BackEnd.DataAccess.DatabaseAccess;
+using Sep6BackEnd.DataAccess.IMDBAccess;
+using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace Sep6BackEnd.BusinessLogic
 {
-    public class UsersBL : IUsersBL
+    public class UsersRequestHandler : IUsersRequestHandler
     {
-        private IDatabaseAccess _databaseAccess;
+        private readonly IDatabaseAccess _databaseAccess;
+        private readonly ITmdbAccess _tmdbAccess;
 
-        public UsersBL(DatabaseAccess databaseAccess)
+        public UsersRequestHandler(DatabaseAccess databaseAccess, TmdbAccess tmdbAccess)
         {
             _databaseAccess = databaseAccess;
+            _tmdbAccess = tmdbAccess;
         }
 
 
@@ -51,6 +58,23 @@ namespace Sep6BackEnd.BusinessLogic
         public bool GetFavoriteMovie(string userName, int movieId)
         {
             return _databaseAccess.GetFavoriteMovie(userName, movieId);
+        }
+
+        public async Task<IEnumerable<Movie>> GetAllMyFavoritesMovies(string userName)
+        {
+            //start fetching favorite ids from local database
+            var myFavoriteMoviesIds = await _databaseAccess.GetAllMyFavoritesIds(userName);
+            
+            var myfavorites = new List<Movie>();
+            //fetch favorite movies from TMDBAPI
+            foreach (var id in myFavoriteMoviesIds)
+            {
+                var movie = await _tmdbAccess.getMovie(id);
+                myfavorites.Add(movie);
+            }
+
+            return myfavorites;
+            
         }
     }
 }

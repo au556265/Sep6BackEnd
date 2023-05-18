@@ -8,18 +8,18 @@ namespace Sep6BackEnd.Controllers
     [Route("[controller]")]
     public class ActorController : ControllerBase
     {
-        private TmdbBL _tmdbBl;
+        private TmdbAPIRequestHandler _tmdbApiRequestHandler;
 
-        public ActorController(TmdbBL _tmdbBl)
+        public ActorController(TmdbAPIRequestHandler tmdbApiRequestHandler)
         {
-            this._tmdbBl =_tmdbBl;
+            this._tmdbApiRequestHandler =tmdbApiRequestHandler;
         }
         
         [HttpGet]
         [Route("getActors/{name}")]
         public  List<Actor> GetActors( [FromRoute] string name)
         {
-            var results = _tmdbBl.GetTop10ActorsByName(name);
+            var results = _tmdbApiRequestHandler.GetTop10ActorsByName(name);
             return results;
         }
         
@@ -28,7 +28,7 @@ namespace Sep6BackEnd.Controllers
         [Route("getMoviesByActors/{name}")]
         public  List<Cast> GetMoviesByActor( [FromRoute] string name)
         {
-            var results = _tmdbBl.GetMoviesByActors(name);
+            var results = _tmdbApiRequestHandler.GetMoviesByActors(name);
             return results;
         }
         
@@ -36,7 +36,7 @@ namespace Sep6BackEnd.Controllers
         [Route("getMostPopularActors")]
         public List<Actor> GetMostPopularActor()
         {
-            var results = _tmdbBl.GetMostPopularActors();
+            var results = _tmdbApiRequestHandler.GetMostPopularActors();
             return results;
         }
       

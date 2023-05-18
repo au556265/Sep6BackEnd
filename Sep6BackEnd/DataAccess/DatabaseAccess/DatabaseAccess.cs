@@ -1,5 +1,7 @@
-﻿using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 using Sep6BackEnd.Controllers;
 
@@ -60,7 +62,8 @@ commit tran";
 
             return new RatingObject();
         }
-
+        
+        
 
         public void SetFavoriteMovie(string userName, string movieTitle)
         {
@@ -117,5 +120,17 @@ commit tran";
                 return favorite;
             }
         }
+
+      
+        public async Task <IEnumerable<int>>GetAllMyFavoritesIds(string userName)
+        {
+            using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
+            
+            const string query = @"SELECT MovieId FROM MovieFavorites2 WHERE Username= @userName";
+            var allMyFavorites =  await dbSqlConnection.QueryAsync<int>(query, new {userName});
+            return allMyFavorites;
+            
+        }
+        
     }
 }

@@ -65,15 +65,6 @@ commit tran";
         
         
 
-        public void SetFavoriteMovie(string userName, string movieTitle)
-        {
-            using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
-            {
-                const string query = @"INSERT INTO MovieFavorites (Username, Moviename) VALUES (@userName, @movieTitle) ";
-                dbSqlConnection.Query(query, new {userName, movieTitle});
-            }
-        }
-
         public RatingObject SetMovieRating( RatingObject ratingObject)
         {
             string userName = ratingObject.Username;
@@ -131,6 +122,22 @@ commit tran";
             return allMyFavorites;
             
         }
-        
+
+        public async Task<double> GetRatingSumFromUsers(int movieId)
+        {
+            using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
+            
+            const string query = @"SELECT SUM(Rating) FROM RatedMovies2 WHERE MovieId= @movieId";
+            var usersRatingSum = await dbSqlConnection.QuerySingleOrDefaultAsync<double?>(query, new {movieId});
+            return usersRatingSum ?? 0.0;
+        }
+
+        public async Task<int> GetCountedUsersRating(int movieId)
+        {
+            using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
+            const string query = @"SELECT Count(Username) FROM RatedMovies2 WHERE MovieId= @movieId";
+            var usersCounted = await dbSqlConnection.QuerySingleOrDefaultAsync<int?>(query, new {movieId});
+            return usersCounted ?? 0;
+        }
     }
 }

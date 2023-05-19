@@ -13,5 +13,8 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
          int GetMovieRating(string userName, int movieId);
          bool GetFavoriteMovie(string userName, int movieId);
          Task<IEnumerable<int>> GetAllMyFavoritesIds(string userName);
+         Task<double> GetRatingSumFromUsers(int movieId);
+
+         Task<int> GetCountedUsersRating(int movieId);
     }
 }

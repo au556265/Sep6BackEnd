@@ -74,7 +74,23 @@ namespace Sep6BackEnd.BusinessLogic
             }
 
             return myfavorites;
+        }
+
+        public async Task<double> GetAverageRatingTotal(int movieId)
+        {
+            var ratingSumFromUsers= await _databaseAccess.GetRatingSumFromUsers(movieId);
+            var countedUsersRating = await _databaseAccess.GetCountedUsersRating(movieId);
             
+            var movie = await _tmdbAccess.getMovie(movieId);
+            
+            var tmdbRatingCount = movie.vote_count;
+            var tmdbRatingAverage = movie.vote_average;
+            
+            var tmdbRatingSum = tmdbRatingAverage * tmdbRatingCount;
+
+            var totalVotingAverage = (tmdbRatingSum+ratingSumFromUsers)/(tmdbRatingCount+countedUsersRating);
+
+            return totalVotingAverage;
         }
     }
 }

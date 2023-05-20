@@ -26,10 +26,15 @@ namespace Sep6BackEnd.Controllers
         
         [HttpGet]
         [Route("getMoviesByActors/{name}")]
-        public  List<Cast> GetMoviesByActor( [FromRoute] string name)
+        public  ActionResult<List<MoviesByActor>> GetMoviesByActor( [FromRoute] string name)
         {
-            var results = _tmdbApiRequestHandler.GetMoviesByActors(name);
-            return results;
+            var results = _tmdbApiRequestHandler.GetMoviesByActor(name);
+            if (results.Count == 0)
+            {
+                return NotFound("Actor can't be found");
+            }
+
+            return Ok(results);
         }
         
         [HttpGet]

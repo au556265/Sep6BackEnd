@@ -39,20 +39,26 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             return data.results;
         }
 
-        public async Task<List<Cast>> getMoviesByActor(string name)
+        public async Task<List<MoviesByActor>> getMoviesByActor(string name)
         {
             //Getting Actor ID by String Name
             string Actorurl = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
             string Actorresponse = await client.GetStringAsync(Actorurl);
             var ActorData = JsonConvert.DeserializeObject<Actor.Root>(Actorresponse);
 
+            if (ActorData.results.Count == 0)
+            {
+                return new List<MoviesByActor>();
+            }
             var ActorID = ActorData.results[0].id;
+            
 
             //Getting list of Movies
             string url = $"https://api.themoviedb.org/3/person/{ActorID}/movie_credits?api_key="+ keys.APIKEY + $"&language=en-US";
             string response = await client.GetStringAsync(url);
-            var data = JsonConvert.DeserializeObject<Cast.Root>(response);
+            var data = JsonConvert.DeserializeObject<MoviesByActor.Root>(response);
             return data.cast;
+            
         }
 
         public async Task<List<Series>> getMostPopularSeries()

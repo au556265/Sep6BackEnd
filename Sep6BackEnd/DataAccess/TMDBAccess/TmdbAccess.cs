@@ -58,8 +58,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             string response = await client.GetStringAsync(url);
             var data = JsonConvert.DeserializeObject<MoviesByActor.Root>(response);
             return data.cast;
-
-
+            
         }
 
         public async Task<List<Series>> getMostPopularSeries()

@@ -8,7 +8,7 @@ namespace Sep6BackEnd.DataAccess.IMDBAccess
     {
         public Task<List<Movie>> getByTitle(string name);
         public Task<List<Actor>> getByActorByName(string name);
-        public Task<List<Cast>> getMoviesByActor(string name);
+        public Task<List<MoviesByActor>> getMoviesByActor(string name);
 
         public Task<List<Series>> getMostPopularSeries();
 

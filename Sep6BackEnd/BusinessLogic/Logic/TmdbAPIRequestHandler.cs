@@ -51,7 +51,7 @@ namespace Sep6BackEnd.BusinessLogic
             return returnList;
         }
         
-        public List<Cast> GetMoviesByActors(string name)
+        public List<MoviesByActor> GetMoviesByActor(string name)
         {
             var allMoviesByActor = _tmdbAccess.getMoviesByActor(name).Result;
             

@@ -53,7 +53,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         public async Task<List<MoviesByActor>> GetMoviesByActor(string name)
         {
             //Getting Actor ID by String Name
-            string Actorurl = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US";
+            string Actorurl = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
             string Actorresponse = await client.GetStringAsync(Actorurl);
             var ActorData = JsonConvert.DeserializeObject<Actor.Root>(Actorresponse);
 

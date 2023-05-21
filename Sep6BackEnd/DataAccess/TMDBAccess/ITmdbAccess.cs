@@ -10,6 +10,8 @@ namespace Sep6BackEnd.DataAccess.IMDBAccess
         Task<List<Actor>> GetByActorByName(string name);
         Task<PersonDetails> GetActorById(int id);
         Task<List<MoviesByActor>> GetMoviesByActor(string name);
+        
+        Task<List<MoviesByActor>> GetMoviesByActorId(int id);
 
         Task<List<Series>> GetMostPopularSeries();
 

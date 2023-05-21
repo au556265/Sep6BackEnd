@@ -69,7 +69,7 @@ namespace Sep6BackEnd.BusinessLogic
             //fetch favorite movies from TMDBAPI
             foreach (var id in myFavoriteMoviesIds)
             {
-                var movie = await _tmdbAccess.getMovie(id);
+                var movie = await _tmdbAccess.GetMovie(id);
                 myfavorites.Add(movie);
             }
 
@@ -81,7 +81,7 @@ namespace Sep6BackEnd.BusinessLogic
             var ratingSumFromUsers= await _databaseAccess.GetRatingSumFromUsers(movieId);
             var countedUsersRating = await _databaseAccess.GetCountedUsersRating(movieId);
             
-            var movie = await _tmdbAccess.getMovie(movieId);
+            var movie = await _tmdbAccess.GetMovie(movieId);
             
             var tmdbRatingCount = movie.vote_count;
             var tmdbRatingAverage = movie.vote_average;

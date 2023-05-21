@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Sep6BackEnd.Controllers;
 using Sep6BackEnd.DataAccess.IMDBAccess;
 using Sep6BackEnd.DataAccess.TMDBAccess;
@@ -17,7 +18,7 @@ namespace Sep6BackEnd.BusinessLogic
 
         public List<Movie> GetTop5MoviesByTitle(string name)
         {
-            var allMovies = _tmdbAccess.getByTitle(name).Result;
+            var allMovies = _tmdbAccess.GetByTitle(name).Result;
 
             int i = 0;
             List<Movie> returnList = new List<Movie>();
@@ -35,7 +36,7 @@ namespace Sep6BackEnd.BusinessLogic
         
         public List<Actor> GetTop10ActorsByName(string name)
         {
-            var allActors = _tmdbAccess.getByActorByName(name).Result;
+            var allActors = _tmdbAccess.GetByActorByName(name).Result;
 
             int i = 0;
             List<Actor> returnList = new List<Actor>();
@@ -50,40 +51,46 @@ namespace Sep6BackEnd.BusinessLogic
 
             return returnList;
         }
-        
+
+        public async Task<PersonDetails> GetActorById(int id)
+        {
+            var actor = await _tmdbAccess.GetActorById(id);
+            return actor;
+        }
+
         public List<MoviesByActor> GetMoviesByActor(string name)
         {
-            var allMoviesByActor = _tmdbAccess.getMoviesByActor(name).Result;
+            var allMoviesByActor = _tmdbAccess.GetMoviesByActor(name).Result;
             
             return allMoviesByActor;
         }
 
         public List<Series> GetMostPopularSeries()
         {
-            var weeklyPopularSeries = _tmdbAccess.getMostPopularSeries().Result;
+            var weeklyPopularSeries = _tmdbAccess.GetMostPopularSeries().Result;
             return weeklyPopularSeries;
         }
         
         public List<Movie> GetMostPopularMovies()
         {
-            var weeklyPopularMovies = _tmdbAccess.getMostPopularMovies().Result;
+            var weeklyPopularMovies = _tmdbAccess.GetMostPopularMovies().Result;
             return weeklyPopularMovies;
         }
         
         public List<Actor> GetMostPopularActors()
         {
-            var weeklyPopularActors = _tmdbAccess.getMostPopularActors().Result;
+            var weeklyPopularActors = _tmdbAccess.GetMostPopularActors().Result;
             return weeklyPopularActors;
         }
 
         public Movie GetMovie(int id)
         {
-            return _tmdbAccess.getMovie(id).Result;
+            return _tmdbAccess.GetMovie(id).Result;
         }
 
         public List<Cast> GetActorsByMovie(int id)
         {
-            var allCast = _tmdbAccess.getActorByMovie(id).Result;
+            var allCast = _tmdbAccess.GetActorByMovie(id).Result;
             return allCast;
         }
     }

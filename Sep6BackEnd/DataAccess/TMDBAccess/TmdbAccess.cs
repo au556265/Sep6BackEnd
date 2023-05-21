@@ -17,7 +17,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             this.keys = keys;
         }
         
-        public async Task<List<Movie>> getByTitle(string name)
+        public async Task<List<Movie>> GetByTitle(string name)
         {
             string url = "https://api.themoviedb.org/3/search/movie?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
 
@@ -28,7 +28,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             return data.results;        
         }
         
-        public async Task<List<Actor>> getByActorByName(string name)
+        public async Task<List<Actor>> GetByActorByName(string name)
         {
             string url = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
 
@@ -39,7 +39,18 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             return data.results;
         }
 
-        public async Task<List<MoviesByActor>> getMoviesByActor(string name)
+        public async Task<PersonDetails> GetActorById(int id)
+        {
+            string url = $"https://api.themoviedb.org/3/person/{id}?api_key="+ keys.APIKEY;
+
+            string response = await client.GetStringAsync(url);
+
+            var data = JsonConvert.DeserializeObject<PersonDetails>(response);
+
+            return data;
+        }
+
+        public async Task<List<MoviesByActor>> GetMoviesByActor(string name)
         {
             //Getting Actor ID by String Name
             string Actorurl = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
@@ -61,7 +72,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             
         }
 
-        public async Task<List<Series>> getMostPopularSeries()
+        public async Task<List<Series>> GetMostPopularSeries()
         {
             string url = $"https://api.themoviedb.org/3/trending/tv/week?api_key="+ keys.APIKEY;
             string response = await client.GetStringAsync(url);
@@ -69,7 +80,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             return data.results;
         }
 
-        public async Task<List<Movie>> getMostPopularMovies()
+        public async Task<List<Movie>> GetMostPopularMovies()
         {
             string url = $"https://api.themoviedb.org/3/trending/movie/week?api_key="+ keys.APIKEY;
             string response = await client.GetStringAsync(url);
@@ -77,7 +88,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             return data.results;
         }
 
-        public async Task<List<Actor>> getMostPopularActors()
+        public async Task<List<Actor>> GetMostPopularActors()
         {
             string url = $"https://api.themoviedb.org/3/trending/person/week?api_key="+ keys.APIKEY;
             string response = await client.GetStringAsync(url);
@@ -85,7 +96,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             return data.results;
         }
 
-        public async Task<Movie> getMovie(int id)
+        public async Task<Movie> GetMovie(int id)
         {
             string url = $"https://api.themoviedb.org/3/movie/{id}?api_key="+keys.APIKEY+"&language=en-US";
             string response = await client.GetStringAsync(url);
@@ -93,7 +104,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             return data;
         }
 
-        public async Task<List<Cast>> getActorByMovie(int MovieID)
+        public async Task<List<Cast>> GetActorByMovie(int MovieID)
         {
             string url = $"https://api.themoviedb.org/3/movie/{MovieID}/credits?api_key="+keys.APIKEY+"&language=en-US";
             string response = await client.GetStringAsync(url);

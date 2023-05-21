@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Sep6BackEnd.Controllers;
 using Sep6BackEnd.DataAccess.IMDBAccess;
@@ -69,6 +71,23 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             string response = await client.GetStringAsync(url);
             var data = JsonConvert.DeserializeObject<MoviesByActor.Root>(response);
             return data.cast;
+            
+        }
+
+        public async Task<List<MoviesByActor>> GetMoviesByActorId(int id)
+        {
+            //Getting list of Movies
+            string url = $"https://api.themoviedb.org/3/person/{id}/movie_credits?api_key="+ keys.APIKEY + $"&language=en-US";
+            try
+            {
+                string response = await client.GetStringAsync(url);
+                var data = JsonConvert.DeserializeObject<MoviesByActor.Root>(response);
+                return data.cast;
+            }
+            catch (Exception e)
+            {
+                return new List<MoviesByActor>();
+            }
             
         }
 

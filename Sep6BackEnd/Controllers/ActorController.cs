@@ -33,10 +33,23 @@ namespace Sep6BackEnd.Controllers
         }
         
         [HttpGet]
-        [Route("getMoviesByActors/{name}")]
+        [Route("getMoviesByActor/{name}")]
         public  ActionResult<List<MoviesByActor>> GetMoviesByActor( [FromRoute] string name)
         {
             var results = _tmdbApiRequestHandler.GetMoviesByActor(name);
+            if (results.Count == 0)
+            {
+                return NotFound("Actor can't be found");
+            }
+
+            return Ok(results);
+        }
+        
+        [HttpGet]
+        [Route("getMoviesByActorId/{id}")]
+        public async Task<ActionResult<List<MoviesByActor>>> GetMoviesByActorId( [FromRoute] int id)
+        {
+            var results = await _tmdbApiRequestHandler.GetMoviesByActorId(id);
             if (results.Count == 0)
             {
                 return NotFound("Actor can't be found");

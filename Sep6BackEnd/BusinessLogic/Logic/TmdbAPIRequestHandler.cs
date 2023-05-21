@@ -64,6 +64,13 @@ namespace Sep6BackEnd.BusinessLogic
             
             return allMoviesByActor;
         }
+        
+        public async Task<List<MoviesByActor>> GetMoviesByActorId(int id)
+        {
+            var allMoviesByActor = await _tmdbAccess.GetMoviesByActorId(id);
+            
+            return allMoviesByActor;
+        }
 
         public List<Series> GetMostPopularSeries()
         {

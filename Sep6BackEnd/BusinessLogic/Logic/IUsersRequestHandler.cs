@@ -14,6 +14,5 @@ namespace Sep6BackEnd.BusinessLogic
         int GetMovieRating(string userName, int movieId);
         bool GetFavoriteMovie(string userName, int movieId);
         Task<IEnumerable<Movie>> GetAllMyFavoritesMovies(string userName);
-        Task<double> GetAverageRatingTotal(int movieId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sep6BackEnd.BusinessLogic;
 
@@ -23,6 +24,13 @@ namespace Sep6BackEnd.Controllers
             return results;
         }
         
+        [HttpGet]
+        [Route("getActorById/{id}")]
+        public async Task<PersonDetails>GetActorById( [FromRoute] int id)
+        {
+            var result = await _tmdbApiRequestHandler.GetActorById(id);
+            return result;
+        }
         
         [HttpGet]
         [Route("getMoviesByActors/{name}")]

@@ -6,17 +6,18 @@ namespace Sep6BackEnd.DataAccess.IMDBAccess
 {
     public interface ITmdbAccess
     {
-        public Task<List<Movie>> getByTitle(string name);
-        public Task<List<Actor>> getByActorByName(string name);
-        public Task<List<MoviesByActor>> getMoviesByActor(string name);
+        Task<List<Movie>> GetByTitle(string name);
+        Task<List<Actor>> GetByActorByName(string name);
+        Task<PersonDetails> GetActorById(int id);
+        Task<List<MoviesByActor>> GetMoviesByActor(string name);
 
-        public Task<List<Series>> getMostPopularSeries();
+        Task<List<Series>> GetMostPopularSeries();
 
-        public Task<List<Movie>> getMostPopularMovies();
+        Task<List<Movie>> GetMostPopularMovies();
 
-        public Task<List<Actor>> getMostPopularActors();
-        public Task<Movie> getMovie(int id);
-        public Task<List<Cast>> getActorByMovie(int movieId);
+        Task<List<Actor>> GetMostPopularActors();
+        Task<Movie> GetMovie(int id);
+        Task<List<Cast>> GetActorByMovie(int movieId);
         
     }
 }

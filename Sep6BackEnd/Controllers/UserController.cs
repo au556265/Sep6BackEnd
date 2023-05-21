@@ -13,7 +13,7 @@ namespace Sep6BackEnd.Controllers
         
         public UserController(UsersRequestHandler usersRequestHandler)
         {
-            this._usersRequestHandler = usersRequestHandler;
+            _usersRequestHandler = usersRequestHandler;
         }
         
         [HttpPost]
@@ -68,13 +68,6 @@ namespace Sep6BackEnd.Controllers
             var results = await _usersRequestHandler.GetAllMyFavoritesMovies(userName);
             return results;
         }
-
-        [HttpGet]
-        [Route("getAverageRatingTotal/{movieId}")]
-        public async Task<double> GetAverageRatingTotal(int movieId)
-        {
-            var results = await _usersRequestHandler.GetAverageRatingTotal(movieId);
-            return results;
-        }
+        
     }
 }

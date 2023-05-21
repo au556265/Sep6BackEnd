@@ -42,6 +42,7 @@ namespace Sep6BackEnd
             services.AddScoped<TmdbAccess>();
             services.AddScoped<UsersRequestHandler>();
             services.AddScoped<DatabaseAccess>();
+            services.AddScoped<StatisticHandler>();
 
             services.AddCors(cors =>
             {

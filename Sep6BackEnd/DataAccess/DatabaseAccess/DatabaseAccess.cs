@@ -43,12 +43,19 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
 
         public Users Login(string userName, string password)
         {
-            using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
+            try
             {
+                using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
                 const string query = @"SELECT 1 FROM Users WHERE Username= @userName AND Password= @password ";
                 var results = (Users) dbSqlConnection.QueryFirstOrDefault<Users>(query, new {userName, password});
                 return results;
+                
             }
+            catch (Exception e)
+            {
+                return null;
+            }
+           
         }
 
         public MovieFavorite SetFavoriteMovie(MovieFavorite movieFavorite)

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Sep6BackEnd.Controllers;
 
 namespace Sep6BackEnd.DataAccess.DatabaseAccess
@@ -15,127 +18,137 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
             this.keys = keys;
         }
 
-        public User CreateUser(string userName, string email, string password)
+        public Users CreateUser(string userName, string email, string password)
         {
-            using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
+            try
             {
+                using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
                 const string query =
-                    @"INSERT INTO Users (Username, Password, Email) OUTPUT INSERTED.* VALUES (@userName, @password, @email)";
+                    @"IF NOT EXISTS ( SELECT 1 FROM Users WHERE Username = @username OR Email =@email) 
+                    BEGIN
+                    INSERT INTO Users (Username, Password, Email) OUTPUT INSERTED.* VALUES (@userName, @password, @email)
+                    END";
 
-                var output = dbSqlConnection.QuerySingle<User>(query, new {userName, password, email});
-
+                var output = dbSqlConnection.QuerySingle<Users>(query, new {userName, password, email});
+                
                 return output;
+
             }
+            catch (Exception e)
+            {
+                return null;
+            }
+
         }
 
-        public User Login(string userName, string password)
+        public Users Login(string userName, string password)
         {
             using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
             {
                 const string query = @"SELECT 1 FROM Users WHERE Username= @userName AND Password= @password ";
-                var results = (User) dbSqlConnection.QueryFirstOrDefault<User>(query, new {userName, password});
+                var results = (Users) dbSqlConnection.QueryFirstOrDefault<Users>(query, new {userName, password});
                 return results;
             }
         }
 
-        public RatingObject SetFavoriteMovie(RatingObject ratingObject)
+        public MovieFavorite SetFavoriteMovie(MovieFavorite movieFavorite)
         {
-            string userName = ratingObject.Username;
-            int movieId = ratingObject.MovieId;
-            int favorit = ratingObject.Favorit;
+            int userId = movieFavorite.UserId;
+            int movieId = movieFavorite.MovieId;
+            int favorite = movieFavorite.Favorite;
             using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
             {
                 const string query = @"BEGIN TRAN
-IF EXISTS (select * from MovieFavorites2 where Username = @userName AND MovieId = @movieId)
+IF EXISTS (select * from MovieFavorite where UserId = @userId AND MovieId = @movieId)
 begin
-   update MovieFavorites2 set Favorit = @favorit
-   where Username = @userName AND MovieId = @movieId
+   update MovieFavorite set Favorite = @favorite
+   where UserId = @userId AND MovieId = @movieId
 end
 else
 begin
-   insert into MovieFavorites2 (Username, MovieId, Favorit)
-   values (@userName, @movieId, @favorit)
+   insert into MovieFavorite (UserId, MovieId, Favorite)
+   values (@userId, @movieId, @favorite)
 end
 commit tran";
-                dbSqlConnection.Query(query, new {userName, movieId, favorit});
+                dbSqlConnection.Query(query, new {userId, movieId, favorite});
             }
 
-            return new RatingObject();
+            return new MovieFavorite();
         }
         
         
 
-        public RatingObject SetMovieRating( RatingObject ratingObject)
+        public MovieRating SetMovieRating( MovieRating movieRating)
         {
-            string userName = ratingObject.Username;
-            int movieId = ratingObject.MovieId;
-            int rating = ratingObject.Rating;
+            int userId = movieRating.UserId;
+            int movieId = movieRating.MovieId;
+            int rating = movieRating.Rating;
             using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
             {
                 const string query = @"BEGIN TRAN
-IF EXISTS (select * from RatedMovies2 where Username = @userName AND MovieId = @movieId)
+IF EXISTS (select * from MovieRating where UserId = @userId AND MovieId = @movieId)
 begin
-   update RatedMovies2 set Rating = @rating
-   where Username = @userName AND MovieId = @movieId
+   update MovieRating set Rating = @rating
+   where UserId = @userId AND MovieId = @movieId
 end
 else
 begin
-   insert into RatedMovies2 (Username, MovieId, Rating)
-   values (@userName, @movieId, @rating)
+   insert into MovieRating (UserId, MovieId, Rating)
+   values (@userId, @movieId, @rating)
 end
 commit tran";
-                dbSqlConnection.Query(query, new {userName, movieId, rating});
+                dbSqlConnection.Query(query, new {userId, movieId, rating});
             }
 
-            return new RatingObject();
+            return new MovieRating();
         }
 
-        public int GetMovieRating(string userName, int movieId)
+        public int GetMovieRating(int userId, int movieId)
         {
             using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
             {
-                const string query = @"SELECT Rating FROM RatedMovies2 WHERE Username= @userName AND MovieId= @movieId";
-                var rating = dbSqlConnection.QueryFirstOrDefault<int>(query, new {userName, movieId});
+                const string query = @"SELECT Rating FROM MovieRating WHERE UserId= @userId AND MovieId= @movieId";
+                var rating = dbSqlConnection.QueryFirstOrDefault<int>(query, new {userId, movieId});
                 
                 return rating;
             }
         }
 
-        public bool GetFavoriteMovie(string userName, int movieId)
+        public bool GetFavoriteMovie(int userId, int movieId)
         {
             using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
             {
-                const string query = @"SELECT Favorit FROM MovieFavorites2 WHERE Username= @userName AND MovieId= @movieId";
-                var favorite = dbSqlConnection.QueryFirstOrDefault<bool>(query, new {userName, movieId});
+                const string query = @"SELECT Favorite FROM MovieFavorite WHERE UserId= @userId AND MovieId= @movieId";
+                var favorite = dbSqlConnection.QueryFirstOrDefault<bool>(query, new {userId, movieId});
                 
                 return favorite;
             }
         }
 
       
-        public async Task <IEnumerable<int>>GetAllMyFavoritesIds(string userName)
+        public async Task <IEnumerable<int>>GetAllMyFavoritesIds(int userId)
         {
             using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
             
-            const string query = @"SELECT MovieId FROM MovieFavorites2 WHERE Username= @userName";
-            var allMyFavorites =  await dbSqlConnection.QueryAsync<int>(query, new {userName});
+            const string query = @"SELECT MovieId FROM MovieFavorite WHERE UserId= @userId AND Favorite = 1";
+            var allMyFavorites =  await dbSqlConnection.QueryAsync<int>(query, new {userId});
             return allMyFavorites;
             
         }
 
         public async Task<double> GetRatingSumFromUsers(int movieId)
         {
-            using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
+            await using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
             
-            const string query = @"SELECT SUM(Rating) FROM RatedMovies2 WHERE MovieId= @movieId";
+            const string query = @"SELECT SUM(Rating) FROM MovieRating WHERE MovieId= @movieId";
             var usersRatingSum = await dbSqlConnection.QuerySingleOrDefaultAsync<double?>(query, new {movieId});
             return usersRatingSum ?? 0.0;
         }
 
         public async Task<int> GetCountedUsersRating(int movieId)
         {
-            using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
-            const string query = @"SELECT Count(Username) FROM RatedMovies2 WHERE MovieId= @movieId";
+            await using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
+            const string query = @"SELECT Count(UserId) FROM MovieRating WHERE MovieId= @movieId";
             var usersCounted = await dbSqlConnection.QuerySingleOrDefaultAsync<int?>(query, new {movieId});
             return usersCounted ?? 0;
         }

@@ -17,7 +17,7 @@ namespace Sep6BackEnd.Controllers
         
         public MovieController(TmdbAPIRequestHandler tmdbApiRequestHandler)
         {
-            this._tmdbApiRequestHandler=tmdbApiRequestHandler;
+            _tmdbApiRequestHandler=tmdbApiRequestHandler;
         }
         
         [HttpGet]

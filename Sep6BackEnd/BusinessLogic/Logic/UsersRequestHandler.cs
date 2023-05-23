@@ -20,10 +20,10 @@ namespace Sep6BackEnd.BusinessLogic
         }
 
 
-        public User CreateUser(string userName, string email, string password)
+        public Users CreateUser(string userName, string email, string password)
         {
-            User user = _databaseAccess.CreateUser(userName, email, password);
-            return user;
+            Users users = _databaseAccess.CreateUser(userName, email, password);
+            return users;
         }
 
         public string Login(string userName, string password)
@@ -39,31 +39,31 @@ namespace Sep6BackEnd.BusinessLogic
             }
         }
 
-        public RatingObject SetFavoriteMovie(RatingObject ratingObject)
+        public MovieFavorite SetFavoriteMovie(MovieFavorite movieFavorite)
         {
-            return _databaseAccess.SetFavoriteMovie(ratingObject);
+            return _databaseAccess.SetFavoriteMovie(movieFavorite);
         }
 
-        public RatingObject SetMovieRating(RatingObject ratingObject)
+        public MovieRating SetMovieRating(MovieRating movieRating)
         {
-            return _databaseAccess.SetMovieRating(ratingObject);
+            return _databaseAccess.SetMovieRating(movieRating);
         }
 
-        public int GetMovieRating(string userName, int movieId)
+        public int GetMovieRating(int userId, int movieId)
         {
-            var rating = _databaseAccess.GetMovieRating(userName, movieId);
+            var rating = _databaseAccess.GetMovieRating(userId, movieId);
             return rating;
         }
 
-        public bool GetFavoriteMovie(string userName, int movieId)
+        public bool GetFavoriteMovie(int userId, int movieId)
         {
-            return _databaseAccess.GetFavoriteMovie(userName, movieId);
+            return _databaseAccess.GetFavoriteMovie(userId, movieId);
         }
 
-        public async Task<IEnumerable<Movie>> GetAllMyFavoritesMovies(string userName)
+        public async Task<IEnumerable<Movie>> GetAllMyFavoritesMovies(int userId)
         {
             //start fetching favorite ids local database
-            var myFavoriteMoviesIds = await _databaseAccess.GetAllMyFavoritesIds(userName);
+            var myFavoriteMoviesIds = await _databaseAccess.GetAllMyFavoritesIds(userId);
             
             var myfavorites = new List<Movie>();
             //fetch favorite movies from TMDBAPI

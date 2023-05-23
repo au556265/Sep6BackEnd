@@ -26,17 +26,10 @@ namespace Sep6BackEnd.BusinessLogic
             return users;
         }
 
-        public string Login(string userName, string password)
-        {
+        public Users Login(string userName, string password)
+        { 
             var user = _databaseAccess.Login(userName, password);
-            if (user != null)
-            {
-                return "Successfully logged in name:" + userName;
-            }
-            else
-            {
-                return "ERROR";
-            }
+            return user;
         }
 
         public MovieFavorite SetFavoriteMovie(MovieFavorite movieFavorite)

@@ -33,9 +33,13 @@ namespace Sep6BackEnd.Controllers
         
         [HttpGet]
         [Route("login/{userName}/{password}")]
-        public string Login([FromRoute] string userName, string password)
+        public ActionResult<Users> Login([FromRoute] string userName, string password)
         {
             var results = _usersRequestHandler.Login(userName, password);
+            if (results == null)
+            {
+                return BadRequest("Username or password is wrong");
+            }
             return results;
         }
         

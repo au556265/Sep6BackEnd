@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Sep6BackEnd.Controllers;
 using Sep6BackEnd.DataAccess.IMDBAccess;
@@ -16,40 +17,17 @@ namespace Sep6BackEnd.BusinessLogic
         }
 
 
-        public List<Movie> GetTop5MoviesByTitle(string name)
+        public async Task<List<Movie>> GetTop20MoviesByTitle(string name)
         {
-            var allMovies = _tmdbAccess.GetByTitle(name).Result;
-
-            int i = 0;
-            List<Movie> returnList = new List<Movie>();
-            foreach (var movie in allMovies)
-            {
-                returnList.Add(movie);
-                i++;
-
-                if (i == 5)
-                    break;
-            }
-
-            return returnList;
+            var allMovies = await _tmdbAccess.GetMovieByTitle(name);
+            return allMovies.Take(20).ToList();
+            
         }
         
-        public List<Actor> GetTop10ActorsByName(string name)
+        public async Task<List<Actor>> GetTop20ActorsByName(string name)
         {
-            var allActors = _tmdbAccess.GetByActorByName(name).Result;
-
-            int i = 0;
-            List<Actor> returnList = new List<Actor>();
-            foreach (var actor in allActors)
-            {
-                returnList.Add(actor);
-                i++;
-
-                if (i == 10)
-                    break;
-            }
-
-            return returnList;
+            var allActors = await _tmdbAccess.GetByActorByName(name);
+            return allActors.Take(20).ToList();
         }
 
         public async Task<PersonDetails> GetActorById(int id)
@@ -58,9 +36,9 @@ namespace Sep6BackEnd.BusinessLogic
             return actor;
         }
 
-        public List<MoviesByActor> GetMoviesByActor(string name)
+        public async Task<List<MoviesByActor>> GetMoviesByActor(string name)
         {
-            var allMoviesByActor = _tmdbAccess.GetMoviesByActor(name).Result;
+            var allMoviesByActor = await _tmdbAccess.GetMoviesByActor(name);
             
             return allMoviesByActor;
         }
@@ -72,33 +50,31 @@ namespace Sep6BackEnd.BusinessLogic
             return allMoviesByActor;
         }
 
-        public List<Series> GetMostPopularSeries()
+        public async Task<List<Series>> GetMostPopularSeries()
         {
-            var weeklyPopularSeries = _tmdbAccess.GetMostPopularSeries().Result;
+            var weeklyPopularSeries = await _tmdbAccess.GetMostPopularSeries();
             return weeklyPopularSeries;
         }
         
-        public List<Movie> GetMostPopularMovies()
+        public async Task<List<Movie>> GetMostPopularMovies()
         {
-            var weeklyPopularMovies = _tmdbAccess.GetMostPopularMovies().Result;
-            return weeklyPopularMovies;
+            return await _tmdbAccess.GetMostPopularMovies();
         }
         
-        public List<Actor> GetMostPopularActors()
+        public async Task<List<Actor>> GetMostPopularActors()
         {
-            var weeklyPopularActors = _tmdbAccess.GetMostPopularActors().Result;
+            var weeklyPopularActors = await _tmdbAccess.GetMostPopularActors();
             return weeklyPopularActors;
         }
 
-        public Movie GetMovie(int id)
+        public async Task<Movie> GetMovie(int id)
         {
-            return _tmdbAccess.GetMovie(id).Result;
+            return await _tmdbAccess.GetMovie(id);
         }
 
-        public List<Cast> GetActorsByMovie(int id)
+        public async Task<List<Cast>> GetActorsByMovie(int id)
         {
-            var allCast = _tmdbAccess.GetActorByMovie(id).Result;
-            return allCast;
+            return await _tmdbAccess.GetActorByMovie(id);
         }
     }
 }

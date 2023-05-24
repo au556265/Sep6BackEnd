@@ -19,9 +19,9 @@ namespace Sep6BackEnd.Controllers
         
         [HttpPost]
         [Route("postCreateUser/{userName}/{email}/{password}")]
-        public ActionResult<Users> CreateUser([FromRoute] string userName, string email, string password)
+        public async Task<ActionResult<Users>> CreateUser([FromRoute] string userName, string email, string password)
         { 
-            var results = _usersRequestHandler.CreateUser(userName, email, password);
+            var results = await _usersRequestHandler.CreateUser(userName, email, password);
             if (results == null)
             {
                 return BadRequest("Email or username is already taken please select something else");
@@ -33,9 +33,9 @@ namespace Sep6BackEnd.Controllers
         
         [HttpGet]
         [Route("login/{userName}/{password}")]
-        public ActionResult<Users> Login([FromRoute] string userName, string password)
+        public async Task<ActionResult<Users>> Login([FromRoute] string userName, string password)
         {
-            var results = _usersRequestHandler.Login(userName, password);
+            var results =await  _usersRequestHandler.Login(userName, password);
             if (results == null)
             {
                 return BadRequest("Username or password is wrong");
@@ -45,30 +45,30 @@ namespace Sep6BackEnd.Controllers
         
         [HttpGet]
         [Route("getFavoriteMovie/{userId}/{movieId}")]
-        public bool getFavoriteMovie([FromRoute] int userId, int movieId)
+        public async Task<bool> getFavoriteMovie([FromRoute] int userId, int movieId)
         {
-            return _usersRequestHandler.GetFavoriteMovie(userId, movieId);
+            return await _usersRequestHandler.GetFavoriteMovie(userId, movieId);
         }
         
         [HttpPost]
         [Route("setFavoriteMovie")]
-        public MovieFavorite SetFavoriteMovie([FromBody] MovieFavorite movieFavorite)
+        public async Task<MovieFavorite> SetFavoriteMovie([FromBody] MovieFavorite movieFavorite)
         {
-            return _usersRequestHandler.SetFavoriteMovie(movieFavorite);
+            return await _usersRequestHandler.SetFavoriteMovie(movieFavorite);
         }
         
         [HttpPost]
         [Route("setMovieRating")]
-        public MovieRating SetMovieRating([FromBody] MovieRating movieRating)
+        public async Task<MovieRating> SetMovieRating([FromBody] MovieRating movieRating)
         {
-            return _usersRequestHandler.SetMovieRating(movieRating);
+            return await _usersRequestHandler.SetMovieRating(movieRating);
         }
         
         [HttpGet]
         [Route("getMovieRating/{userId}/{movieId}")]
-        public int GetMovieRating([FromRoute] int userId, int movieId)
+        public async Task<int> GetMovieRating([FromRoute] int userId, int movieId)
         {
-           var rating = _usersRequestHandler.GetMovieRating(userId,movieId);
+           var rating = await _usersRequestHandler.GetMovieRating(userId,movieId);
            return rating;
         }
         

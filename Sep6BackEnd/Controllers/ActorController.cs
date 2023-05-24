@@ -18,10 +18,10 @@ namespace Sep6BackEnd.Controllers
         
         [HttpGet]
         [Route("getActors/{name}")]
-        public  List<Actor> GetActors( [FromRoute] string name)
+        public async Task<List<Actor>> GetActors( [FromRoute] string name)
         {
-            var results = _tmdbApiRequestHandler.GetTop10ActorsByName(name);
-            return results;
+            
+            return await _tmdbApiRequestHandler.GetTop20ActorsByName(name);
         }
         
         [HttpGet]
@@ -34,9 +34,9 @@ namespace Sep6BackEnd.Controllers
         
         [HttpGet]
         [Route("getMoviesByActor/{name}")]
-        public  ActionResult<List<MoviesByActor>> GetMoviesByActor( [FromRoute] string name)
+        public async Task<ActionResult<List<MoviesByActor>>> GetMoviesByActor( [FromRoute] string name)
         {
-            var results = _tmdbApiRequestHandler.GetMoviesByActor(name);
+            var results = await _tmdbApiRequestHandler.GetMoviesByActor(name);
             if (results.Count == 0)
             {
                 return NotFound("Actor can't be found");
@@ -60,9 +60,9 @@ namespace Sep6BackEnd.Controllers
         
         [HttpGet]
         [Route("getMostPopularActors")]
-        public List<Actor> GetMostPopularActor()
+        public async Task<List<Actor>> GetMostPopularActor()
         {
-            var results = _tmdbApiRequestHandler.GetMostPopularActors();
+            var results = await _tmdbApiRequestHandler.GetMostPopularActors();
             return results;
         }
       

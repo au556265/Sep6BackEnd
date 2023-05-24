@@ -17,8 +17,8 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
         {
             this.keys = keys;
         }
-
-        public Users CreateUser(string userName, string email, string password)
+        
+        public async Task<Users> CreateUser(string userName, string email, string password)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
                     INSERT INTO Users (Username, Password, Email) OUTPUT INSERTED.* VALUES (@userName, @password, @email)
                     END";
 
-                var output = dbSqlConnection.QuerySingle<Users>(query, new {userName, password, email});
+                var output = await dbSqlConnection.QuerySingleAsync<Users>(query, new {userName, password, email});
                 
                 return output;
 
@@ -41,13 +41,13 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
 
         }
 
-        public Users Login(string userName, string password)
+        public async Task<Users> Login(string userName, string password)
         {
             try
             {
                 using var dbSqlConnection = new SqlConnection(keys.DBSKEY);
                 const string query = @"SELECT 1 FROM Users WHERE Username= @userName AND Password= @password ";
-                var results = (Users) dbSqlConnection.QueryFirstOrDefault<Users>(query, new {userName, password});
+                var results = await dbSqlConnection.QueryFirstOrDefaultAsync<Users>(query, new {userName, password});
                 return results;
                 
             }
@@ -58,7 +58,7 @@ namespace Sep6BackEnd.DataAccess.DatabaseAccess
            
         }
 
-        public MovieFavorite SetFavoriteMovie(MovieFavorite movieFavorite)
+        public async Task<MovieFavorite> SetFavoriteMovie(MovieFavorite movieFavorite)
         {
             int userId = movieFavorite.UserId;
             int movieId = movieFavorite.MovieId;
@@ -77,7 +77,7 @@ begin
    values (@userId, @movieId, @favorite)
 end
 commit tran";
-                dbSqlConnection.Query(query, new {userId, movieId, favorite});
+                await dbSqlConnection.QueryAsync(query, new {userId, movieId, favorite});
             }
 
             return new MovieFavorite();
@@ -85,7 +85,7 @@ commit tran";
         
         
 
-        public MovieRating SetMovieRating( MovieRating movieRating)
+        public async Task<MovieRating> SetMovieRating( MovieRating movieRating)
         {
             int userId = movieRating.UserId;
             int movieId = movieRating.MovieId;
@@ -104,29 +104,29 @@ begin
    values (@userId, @movieId, @rating)
 end
 commit tran";
-                dbSqlConnection.Query(query, new {userId, movieId, rating});
+                await dbSqlConnection.QueryAsync(query, new {userId, movieId, rating});
             }
 
             return new MovieRating();
         }
 
-        public int GetMovieRating(int userId, int movieId)
+        public async Task<int> GetMovieRating(int userId, int movieId)
         {
             using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
             {
                 const string query = @"SELECT Rating FROM MovieRating WHERE UserId= @userId AND MovieId= @movieId";
-                var rating = dbSqlConnection.QueryFirstOrDefault<int>(query, new {userId, movieId});
+                var rating = await dbSqlConnection.QueryFirstOrDefaultAsync<int>(query, new {userId, movieId});
                 
                 return rating;
             }
         }
 
-        public bool GetFavoriteMovie(int userId, int movieId)
+        public async Task<bool> GetFavoriteMovie(int userId, int movieId)
         {
             using (var dbSqlConnection = new SqlConnection(keys.DBSKEY))
             {
                 const string query = @"SELECT Favorite FROM MovieFavorite WHERE UserId= @userId AND MovieId= @movieId";
-                var favorite = dbSqlConnection.QueryFirstOrDefault<bool>(query, new {userId, movieId});
+                var favorite = await dbSqlConnection.QueryFirstOrDefaultAsync<bool>(query, new {userId, movieId});
                 
                 return favorite;
             }

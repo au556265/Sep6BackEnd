@@ -21,33 +21,31 @@ namespace Sep6BackEnd.Controllers
         }
         
         [HttpGet]
-        [Route("get5MoviesBySearch/{name}")]
-        public  List<Movie> get5MoviesBySearch( [FromRoute] string name)
+        [Route("get20MoviesBySearch/{name}")]
+        public async Task<List<Movie>> Get20MoviesBySearch( [FromRoute] string name)
         {
-            var results = _tmdbApiRequestHandler.GetTop5MoviesByTitle(name);
+            var results = await _tmdbApiRequestHandler.GetTop20MoviesByTitle(name);
             return results;
         }
         [HttpGet]
         [Route("getMovie/{id}")]
-        public  Movie GetMovie( [FromRoute] int id)
+        public async Task<Movie> GetMovie( [FromRoute] int id)
         {
-            var results = _tmdbApiRequestHandler.GetMovie(id);
-            return results;
+            return await _tmdbApiRequestHandler.GetMovie(id);
         }
         [HttpGet]
         [Route("getMostPopularMovies")]
-        public List<Movie> GetMostPopularMovies()
+        public async Task<List<Movie>> GetMostPopularMovies()
         {
-            var results = _tmdbApiRequestHandler.GetMostPopularMovies();
-            return results;
+            return await _tmdbApiRequestHandler.GetMostPopularMovies();
+           
         }
 
         [HttpGet]
         [Route("getActorsByMovie/{id}")]
-        public List<Cast> GetActorsByMovie(int id)
+        public async Task<List<Cast>> GetActorsByMovie(int id)
         {
-            var results = _tmdbApiRequestHandler.GetActorsByMovie(id);
-            return results;
+            return await _tmdbApiRequestHandler.GetActorsByMovie(id);
         }
 
 

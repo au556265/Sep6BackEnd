@@ -19,7 +19,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             this.keys = keys;
         }
         
-        public async Task<List<Movie>> GetByTitle(string name)
+        public async Task<List<Movie>> GetMovieByTitle(string name)
         {
             string url = "https://api.themoviedb.org/3/search/movie?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
 

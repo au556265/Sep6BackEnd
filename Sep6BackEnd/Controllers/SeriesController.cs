@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sep6BackEnd.BusinessLogic;
 
@@ -17,9 +18,9 @@ namespace Sep6BackEnd.Controllers
         
         [HttpGet]
         [Route("getMostPopularSeries")]
-        public List<Series> GetMostPopularSeries()
+        public async Task<List<Series>> GetMostPopularSeries()
         {
-            var results = _tmdbApiRequestHandler.GetMostPopularSeries();
+            var results = await _tmdbApiRequestHandler.GetMostPopularSeries();
             return results;
         }
         

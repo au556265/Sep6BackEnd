@@ -6,7 +6,7 @@ namespace Sep6BackEnd.DataAccess.IMDBAccess
 {
     public interface ITmdbAccess
     {
-        Task<List<Movie>> GetByTitle(string name);
+        Task<List<Movie>> GetMovieByTitle(string name);
         Task<List<Actor>> GetByActorByName(string name);
         Task<PersonDetails> GetActorById(int id);
         Task<List<MoviesByActor>> GetMoviesByActor(string name);

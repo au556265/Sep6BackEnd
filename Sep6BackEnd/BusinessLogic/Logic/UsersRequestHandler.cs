@@ -20,37 +20,37 @@ namespace Sep6BackEnd.BusinessLogic
         }
 
 
-        public Users CreateUser(string userName, string email, string password)
+        public async Task<Users> CreateUser(string userName, string email, string password)
         {
-            Users users = _databaseAccess.CreateUser(userName, email, password);
-            return users;
-        }
-
-        public Users Login(string userName, string password)
-        { 
-            var user = _databaseAccess.Login(userName, password);
+            Users user = await _databaseAccess.CreateUser(userName, email, password);
             return user;
         }
 
-        public MovieFavorite SetFavoriteMovie(MovieFavorite movieFavorite)
-        {
-            return _databaseAccess.SetFavoriteMovie(movieFavorite);
+        public async Task<Users> Login(string userName, string password)
+        { 
+            var user = await _databaseAccess.Login(userName, password);
+            return user;
         }
 
-        public MovieRating SetMovieRating(MovieRating movieRating)
+        public async Task<MovieFavorite> SetFavoriteMovie(MovieFavorite movieFavorite)
         {
-            return _databaseAccess.SetMovieRating(movieRating);
+            return await _databaseAccess.SetFavoriteMovie(movieFavorite);
         }
 
-        public int GetMovieRating(int userId, int movieId)
+        public async Task<MovieRating> SetMovieRating(MovieRating movieRating)
         {
-            var rating = _databaseAccess.GetMovieRating(userId, movieId);
+            return await _databaseAccess.SetMovieRating(movieRating);
+        }
+
+        public async Task<int> GetMovieRating(int userId, int movieId)
+        {
+            var rating = await _databaseAccess.GetMovieRating(userId, movieId);
             return rating;
         }
 
-        public bool GetFavoriteMovie(int userId, int movieId)
+        public async Task<bool> GetFavoriteMovie(int userId, int movieId)
         {
-            return _databaseAccess.GetFavoriteMovie(userId, movieId);
+            return await _databaseAccess.GetFavoriteMovie(userId, movieId);
         }
 
         public async Task<IEnumerable<Movie>> GetAllMyFavoritesMovies(int userId)

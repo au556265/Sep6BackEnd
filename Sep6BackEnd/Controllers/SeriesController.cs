@@ -20,12 +20,12 @@ namespace Sep6BackEnd.Controllers
         }
         
         [HttpGet]
-        [Route("getMostPopularSeries")]
-        public async Task<ActionResult<List<Series>>> GetMostPopularSeries()
+        [Route("getWeeklyTrendingSeries")]
+        public async Task<ActionResult<List<Series>>> GetWeeklyTrendingSeries()
         {
             try
             {
-                var results = await _tmdbApiRequestHandler.GetMostPopularSeries();
+                var results = await _tmdbApiRequestHandler.GetWeeklyTrendingSeries();
                 return Ok(results);
             }
             catch (TmdbException t)

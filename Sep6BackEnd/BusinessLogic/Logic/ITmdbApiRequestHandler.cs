@@ -11,7 +11,7 @@ public interface ITmdbApiRequestHandler
     Task<PersonDetails> GetActorById(int id);
     Task<List<MoviesByActor>> GetMoviesByActor(string name);
     Task<List<MoviesByActor>> GetMoviesByActorId(int id);
-    Task<List<Series>> GetMostPopularSeries();
+    Task<List<Series>> GetWeeklyTrendingSeries();
     Task<List<Movie>> GetMostPopularMovies();
     Task<List<Movie>> GetUpcomingMovies();
     Task<List<Movie>> GetTopRatedMovies();

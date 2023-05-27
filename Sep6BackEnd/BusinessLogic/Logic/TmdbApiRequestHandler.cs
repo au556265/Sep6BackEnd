@@ -88,7 +88,7 @@ namespace Sep6BackEnd.BusinessLogic.Logic
             }
         }
 
-        public async Task<List<Series>> GetMostPopularSeries()
+        public async Task<List<Series>> GetWeeklyTrendingSeries()
         {
             try
             {

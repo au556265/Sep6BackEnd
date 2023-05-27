@@ -88,7 +88,6 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             }
         }
 
-        //How to test this one 
         public async Task<List<MoviesByActor>> GetMoviesByActor(string name)
         {
             try
@@ -181,7 +180,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         {
             try
             {
-                string url = $"https://api.themoviedb.org/3/trending/movie/week?api_key="+ keys.APIKEY;
+                string url = $"https://api.themoviedb.org/3/movie/popular?api_key="+ keys.APIKEY;
                 HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
                 if (!httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -220,7 +219,29 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
                 throw;
             }
         }
+        
+        public async Task<List<Movie>> GetTopRatedMovies()
+        {
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/movie/top_rated?api_key="+ keys.APIKEY + $"&language=en-US&page=1";
+                HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
+                if (!httpResponseMessage.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponseMessage.StatusCode.ToString());
+                }
 
+                var response = await httpResponseMessage.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Movie.Root>(response);
+                return data.results;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
         public async Task<List<Actor>> GetMostPopularActors()
         {
             try

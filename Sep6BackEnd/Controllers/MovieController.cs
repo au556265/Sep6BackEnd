@@ -66,7 +66,7 @@ namespace Sep6BackEnd.Controllers
         {
             try
             {
-                return await _tmdbApiRequestHandler.GetMostPopularMovies();
+                return Ok(await _tmdbApiRequestHandler.GetMostPopularMovies());
             }
             catch (TmdbException t)
             {
@@ -84,7 +84,7 @@ namespace Sep6BackEnd.Controllers
         {
             try
             {
-                return await _tmdbApiRequestHandler.GetUpcomingMovies();
+                return Ok(await _tmdbApiRequestHandler.GetUpcomingMovies());
             }
             catch (TmdbException t)
             {
@@ -95,6 +95,25 @@ namespace Sep6BackEnd.Controllers
                 return BadRequest("Error" + e);
             }
         }
+        
+        [HttpGet]
+        [Route("getTopRatedMovies")]
+        public async Task<ActionResult<List<Movie>>> GetTopRatedMovies()
+        {
+            try
+            {
+                return Ok(await _tmdbApiRequestHandler.GetTopRatedMovies());
+            }
+            catch (TmdbException t)
+            {
+                return BadRequest("Error from tmdb with error with statuscode: "+ t.Message); 
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error" + e);
+            }
+        }
+        
         [HttpGet]
         [Route("getActorsByMovie/{id}")]
         public async Task<ActionResult<List<Cast>>> GetActorsByMovieId(int id)

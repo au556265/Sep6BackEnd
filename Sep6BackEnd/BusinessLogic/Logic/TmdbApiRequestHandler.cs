@@ -128,6 +128,19 @@ namespace Sep6BackEnd.BusinessLogic.Logic
                 throw;
             }
         }
+        
+        public async Task<List<Movie>> GetTopRatedMovies()
+        {
+            try
+            {
+                return await _tmdbAccess.GetTopRatedMovies();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
 
         public async Task<List<Actor>> GetMostPopularActors()
         {

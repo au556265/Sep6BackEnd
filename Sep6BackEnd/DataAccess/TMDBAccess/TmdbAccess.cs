@@ -197,7 +197,28 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
                 Console.WriteLine(e);
                 throw;
             }
-       
+        }
+
+        public async Task<List<Movie>> GetUpcomingMovies()
+        {
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/movie/upcoming?api_key="+ keys.APIKEY + $"&language=en-US&page=1";
+                HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
+                if (!httpResponseMessage.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponseMessage.StatusCode.ToString());
+                }
+
+                var response = await httpResponseMessage.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Movie.Root>(response);
+                return data.results;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<List<Actor>> GetMostPopularActors()

@@ -12,7 +12,7 @@ namespace Sep6BackEnd.Controllers
     [Route("[controller]")]
     public class ActorController : ControllerBase
     {
-        private readonly TmdbApiRequestHandler _tmdbApiRequestHandler;
+        private readonly ITmdbApiRequestHandler _tmdbApiRequestHandler;
 
         public ActorController(TmdbApiRequestHandler tmdbApiRequestHandler)
         {
@@ -43,7 +43,6 @@ namespace Sep6BackEnd.Controllers
             }
         }
         
-        // TODO handle bad/ok
         [HttpGet]
         [Route("getActorById/{id}")]
         public async Task<ActionResult<PersonDetails>>GetActorById( [FromRoute] int id)

@@ -13,9 +13,10 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         Task<List<MoviesByActor>> GetMoviesByActorId(int id);
         Task<List<Series>> GetMostPopularSeries();
         Task<List<Movie>> GetMostPopularMovies();
+        Task<List<Movie>> GetUpcomingMovies();
         Task<List<Actor>> GetMostPopularActors();
         Task<Movie> GetMovie(int id);
         Task<List<Cast>> GetActorByMovieId(int movieId);
-        
+
     }
 }

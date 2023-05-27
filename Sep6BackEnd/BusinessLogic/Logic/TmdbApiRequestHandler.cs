@@ -7,7 +7,7 @@ using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace Sep6BackEnd.BusinessLogic.Logic
 {
-    public class TmdbApiRequestHandler
+    public class TmdbApiRequestHandler : ITmdbApiRequestHandler
     {
         private readonly ITmdbAccess _tmdbAccess;
         public TmdbApiRequestHandler(TmdbAccess tmdbAccess)
@@ -115,7 +115,20 @@ namespace Sep6BackEnd.BusinessLogic.Logic
                 throw;
             }
         }
-        
+
+        public async Task<List<Movie>> GetUpcomingMovies()
+        {
+            try
+            {
+                return await _tmdbAccess.GetUpcomingMovies();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task<List<Actor>> GetMostPopularActors()
         {
             try
@@ -144,7 +157,8 @@ namespace Sep6BackEnd.BusinessLogic.Logic
             }
         }
 
-        public async Task<List<Cast>> GetActorsByMovie(int id)
+
+        public async Task<List<Cast>> GetActorsByMovieId(int id)
         {
             try
             {

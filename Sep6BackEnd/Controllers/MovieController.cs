@@ -12,7 +12,7 @@ namespace Sep6BackEnd.Controllers
     [Route("[controller]")]
     public class MovieController: ControllerBase
     {
-        private readonly TmdbApiRequestHandler _tmdbApiRequestHandler;
+        private readonly ITmdbApiRequestHandler _tmdbApiRequestHandler;
         
         public MovieController(TmdbApiRequestHandler tmdbApiRequestHandler)
         {
@@ -79,12 +79,29 @@ namespace Sep6BackEnd.Controllers
         }
         
         [HttpGet]
-        [Route("getActorsByMovie/{id}")]
-        public async Task<ActionResult<List<Cast>>> GetActorsByMovie(int id)
+        [Route("getUpcomingMovies")]
+        public async Task<ActionResult<List<Movie>>> GetUpComingMovies()
         {
             try
             {
-                var result = await _tmdbApiRequestHandler.GetActorsByMovie(id);
+                return await _tmdbApiRequestHandler.GetUpcomingMovies();
+            }
+            catch (TmdbException t)
+            {
+                return BadRequest("Error from tmdb with error with statuscode: "+ t.Message); 
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error" + e);
+            }
+        }
+        [HttpGet]
+        [Route("getActorsByMovie/{id}")]
+        public async Task<ActionResult<List<Cast>>> GetActorsByMovieId(int id)
+        {
+            try
+            {
+                var result = await _tmdbApiRequestHandler.GetActorsByMovieId(id);
                 return Ok(result);
             }
             catch (TmdbException t)

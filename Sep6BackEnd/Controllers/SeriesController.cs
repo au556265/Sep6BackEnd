@@ -12,7 +12,7 @@ namespace Sep6BackEnd.Controllers
     [Route("[controller]")]
     public class SeriesController : ControllerBase
     {
-        private readonly TmdbApiRequestHandler _tmdbApiRequestHandler;
+        private readonly ITmdbApiRequestHandler _tmdbApiRequestHandler;
         
         public SeriesController(TmdbApiRequestHandler tmdbApiRequestHandler)
         {

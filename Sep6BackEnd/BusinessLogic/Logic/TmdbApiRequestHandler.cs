@@ -88,11 +88,11 @@ namespace Sep6BackEnd.BusinessLogic.Logic
             }
         }
 
-        public async Task<List<Series>> GetMostPopularSeries()
+        public async Task<List<Series>> GetWeeklyTrendingSeries()
         {
             try
             {
-                var weeklyPopularSeries = await _tmdbAccess.GetMostPopularSeries();
+                var weeklyPopularSeries = await _tmdbAccess.GetWeeklyTrendingSeries();
                 return weeklyPopularSeries;
 
             }
@@ -142,11 +142,39 @@ namespace Sep6BackEnd.BusinessLogic.Logic
             }
         }
 
+        public async Task<List<Movie>> GetWeeklyTrendingMovies()
+        {
+            try
+            {
+                return await _tmdbAccess.GetWeeklyTrendingMovies();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task<List<Actor>> GetMostPopularActors()
         {
             try
             {
                 var weeklyPopularActors = await _tmdbAccess.GetMostPopularActors();
+                return weeklyPopularActors;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
+        public async Task<List<Actor>> GetWeeklyTrendingActors()
+        {
+            try
+            {
+                var weeklyPopularActors = await _tmdbAccess.GetWeeklyTrendingActors();
                 return weeklyPopularActors;
 
             }

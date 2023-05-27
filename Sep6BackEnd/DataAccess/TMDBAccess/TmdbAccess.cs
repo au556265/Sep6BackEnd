@@ -21,7 +21,8 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         {
             try
             {
-                string url = "https://api.themoviedb.org/3/search/movie?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
+                string url = "https://api.themoviedb.org/3/search/movie?api_key="+ keys.APIKEY 
+                    + $"&language=en-US&query={name}&page=1&include_adult=false";
 
                 HttpResponseMessage httpResponse = await client.GetAsync(url);
                 if (!httpResponse.IsSuccessStatusCode)
@@ -46,7 +47,8 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         {
             try
             {
-                string url = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
+                string url = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY 
+                    + $"&language=en-US&query={name}&page=1&include_adult=false";
                 HttpResponseMessage httpResponse = await client.GetAsync(url);
                 if (!httpResponse.IsSuccessStatusCode)
                 {
@@ -68,7 +70,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         {
             try
             {
-                string url = $"https://api.themoviedb.org/3/person/{id}?api_key="+ keys.APIKEY;
+                string url = $"https://api.themoviedb.org/3/person/{id}?api_key="+ keys.APIKEY + $"&language=en-US";
                 HttpResponseMessage httpResponse = await client.GetAsync(url);
                 if (!httpResponse.IsSuccessStatusCode)
                 {
@@ -93,7 +95,8 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             try
             {
                 //Getting Actor ID by String Name
-                string Actorurl = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
+                string Actorurl = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY 
+                    + $"&language=en-US&query={name}&page=1&include_adult=false";
                 HttpResponseMessage httpResponse = await client.GetAsync(Actorurl);
                 if (!httpResponse.IsSuccessStatusCode)
                 {
@@ -111,7 +114,8 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
                 var ActorID = ActorData.results[0].id;
 
                 //Getting list of Movies
-                string url = $"https://api.themoviedb.org/3/person/{ActorID}/movie_credits?api_key="+ keys.APIKEY + $"&language=en-US";
+                string url = $"https://api.themoviedb.org/3/person/{ActorID}/movie_credits?api_key="+ keys.APIKEY 
+                    + $"&language=en-US";
                 HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
                 if (!httpResponse.IsSuccessStatusCode)
                 {
@@ -136,7 +140,8 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             //Getting list of Movies
             try
             {
-                string url = $"https://api.themoviedb.org/3/person/{id}/movie_credits?api_key="+ keys.APIKEY + $"&language=en-US";
+                string url = $"https://api.themoviedb.org/3/person/{id}/movie_credits?api_key="+ keys.APIKEY 
+                    + $"&language=en-US";
                 HttpResponseMessage httpResponse = await client.GetAsync(url);
                 if (!httpResponse.IsSuccessStatusCode)
                 {
@@ -153,7 +158,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             }
         }
 
-        public async Task<List<Series>> GetMostPopularSeries()
+        public async Task<List<Series>> GetWeeklyTrendingSeries()
         {
             try
             {
@@ -242,11 +247,33 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             }
         }
         
+        public async Task<List<Movie>> GetWeeklyTrendingMovies()
+        {
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/trending/movie/week?api_key="+ keys.APIKEY + $"&language=en-US";
+                HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
+                if (!httpResponseMessage.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponseMessage.StatusCode.ToString());
+                }
+
+                var response = await httpResponseMessage.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Movie.Root>(response);
+                return data.results;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task<List<Actor>> GetMostPopularActors()
         {
             try
             {
-                string url = $"https://api.themoviedb.org/3/trending/person/week?api_key="+ keys.APIKEY;
+                string url = $"https://api.themoviedb.org/3/person/popular?api_key="+ keys.APIKEY +$"&language=en-US&page=1";
                 HttpResponseMessage httpResponse = await client.GetAsync(url);
                 if (!httpResponse.IsSuccessStatusCode)
                 {
@@ -256,7 +283,29 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
                 string response = await httpResponse.Content.ReadAsStringAsync();
                 var data = JsonConvert.DeserializeObject<Actor.Root>(response);
                 return data.results;
-
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
+        public async Task<List<Actor>> GetWeeklyTrendingActors()
+        {
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/trending/person/week?api_key="+ keys.APIKEY 
+                    + $"&language=en-US&page=1";
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                
+                string response = await httpResponse.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Actor.Root>(response);
+                return data.results;
             }
             catch (Exception e)
             {

@@ -130,6 +130,25 @@ namespace Sep6BackEnd.Controllers
                 return BadRequest(e.Message);
             }
         }
+        
+        [HttpGet]
+        [Route("getWeeklyTrendingActors")]
+        public async Task<ActionResult<List<Actor>>> GetWeeklyTrendingActors()
+        {
+            try
+            {
+                var results = await _tmdbApiRequestHandler.GetWeeklyTrendingActors();
+                return Ok(results);
+            }
+            catch (TmdbException t)
+            {
+                return BadRequest("Error from tmdb with error with statuscode: "+ t.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
       
     }
 }

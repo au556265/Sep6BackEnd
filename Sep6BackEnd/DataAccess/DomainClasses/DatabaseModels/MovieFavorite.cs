@@ -1,4 +1,4 @@
-﻿namespace Sep6BackEnd.Controllers;
+﻿namespace Sep6BackEnd.DataAccess.DomainClasses.DatabaseModels;
 
 public class MovieFavorite
 {

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sep6BackEnd.Controllers;
+using Sep6BackEnd.DataAccess.DomainClasses.APIModels;
+using Sep6BackEnd.DataAccess.DomainClasses.DatabaseModels;
 
-namespace Sep6BackEnd.BusinessLogic
-{
+namespace Sep6BackEnd.BusinessLogic.Logic
+{ 
     public interface IUsersRequestHandler
     {
         Task<Users> CreateUser(string userName, string email, string password);

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sep6BackEnd.Controllers;
+namespace Sep6BackEnd.DataAccess.DomainClasses.APIModels;
 
 public class PersonDetails
 {

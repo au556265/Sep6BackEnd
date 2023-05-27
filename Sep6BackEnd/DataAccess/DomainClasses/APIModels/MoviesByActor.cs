@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace Sep6BackEnd.Controllers;
+namespace Sep6BackEnd.DataAccess.DomainClasses.APIModels;
 
 public class MoviesByActor
 {
-    public bool adult { get; set; }
+        public bool adult { get; set; }
         public string backdrop_path { get; set; }
         public List<int> genre_ids { get; set; }
         public int id { get; set; }

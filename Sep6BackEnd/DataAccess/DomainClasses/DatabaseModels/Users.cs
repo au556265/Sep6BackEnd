@@ -1,10 +1,11 @@
-﻿namespace Sep6BackEnd.Controllers
+﻿// TODO - Check comment in Program.cs
+namespace Sep6BackEnd.DataAccess.DomainClasses.DatabaseModels
 {
     public class Users
     {
         public int UserId { get; set; }
-        private string Email { get; set; }
-        private string Username { get; set; }
-        private string Password { get; set; }
+        public string Email { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

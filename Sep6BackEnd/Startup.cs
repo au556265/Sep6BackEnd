@@ -12,8 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Sep6BackEnd.BusinessLogic;
+using Sep6BackEnd.BusinessLogic.Logic;
 using Sep6BackEnd.DataAccess.DatabaseAccess;
-using Sep6BackEnd.DataAccess.IMDBAccess;
 using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace Sep6BackEnd
@@ -38,12 +38,11 @@ namespace Sep6BackEnd
             });
 
             services.AddSingleton(new Keys(Configuration["APIKEY"], Configuration["DBSKEY"]));
-            services.AddScoped<TmdbAPIRequestHandler>();
+            services.AddScoped<TmdbApiRequestHandler>();
             services.AddScoped<TmdbAccess>();
             services.AddScoped<UsersRequestHandler>();
             services.AddScoped<DatabaseAccess>();
             services.AddScoped<StatisticHandler>();
-
             services.AddCors(cors =>
             {
                 cors.AddPolicy(name:

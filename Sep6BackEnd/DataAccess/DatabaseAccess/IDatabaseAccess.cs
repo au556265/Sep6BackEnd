@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sep6BackEnd.Controllers;
+using Sep6BackEnd.DataAccess.DomainClasses.DatabaseModels;
 
 namespace Sep6BackEnd.DataAccess.DatabaseAccess
 {

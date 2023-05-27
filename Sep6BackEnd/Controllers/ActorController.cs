@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Sep6BackEnd.BusinessLogic;
+using Sep6BackEnd.BusinessLogic.Logic;
+using Sep6BackEnd.DataAccess.DomainClasses.APIModels;
+using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace Sep6BackEnd.Controllers
 {
@@ -9,61 +12,124 @@ namespace Sep6BackEnd.Controllers
     [Route("[controller]")]
     public class ActorController : ControllerBase
     {
-        private TmdbAPIRequestHandler _tmdbApiRequestHandler;
+        private readonly TmdbApiRequestHandler _tmdbApiRequestHandler;
 
-        public ActorController(TmdbAPIRequestHandler tmdbApiRequestHandler)
+        public ActorController(TmdbApiRequestHandler tmdbApiRequestHandler)
         {
             _tmdbApiRequestHandler =tmdbApiRequestHandler;
         }
         
         [HttpGet]
         [Route("getActors/{name}")]
-        public async Task<List<Actor>> GetActors( [FromRoute] string name)
+        public async Task<ActionResult<List<Actor>>> GetActors( [FromRoute] string name)
         {
-            
-            return await _tmdbApiRequestHandler.GetTop20ActorsByName(name);
+            try
+            {
+                var result = await _tmdbApiRequestHandler.GetTop20ActorsByName(name);
+                if (result.Count == 0)
+                {
+                    return NotFound($"Actor with {name} does not exist");
+                }
+                return Ok(result);
+
+            }
+            catch (TmdbException t)
+            {
+                return BadRequest("Error from tmdb with error with statuscode: "+ t.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
+        // TODO handle bad/ok
         [HttpGet]
         [Route("getActorById/{id}")]
-        public async Task<PersonDetails>GetActorById( [FromRoute] int id)
+        public async Task<ActionResult<PersonDetails>>GetActorById( [FromRoute] int id)
         {
-            var result = await _tmdbApiRequestHandler.GetActorById(id);
-            return result;
+            try
+            {
+                var result = await _tmdbApiRequestHandler.GetActorById(id);
+               
+                return Ok(result);
+
+            }
+            catch (TmdbException t)
+            {
+                return BadRequest("Error from tmdb with error with statuscode: "+ t.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         [HttpGet]
         [Route("getMoviesByActor/{name}")]
         public async Task<ActionResult<List<MoviesByActor>>> GetMoviesByActor( [FromRoute] string name)
         {
-            var results = await _tmdbApiRequestHandler.GetMoviesByActor(name);
-            if (results.Count == 0)
+            try
             {
-                return NotFound("Actor can't be found");
-            }
+                var results = await _tmdbApiRequestHandler.GetMoviesByActor(name);
+                if (results.Count == 0)
+                {
+                    return NotFound($"Actor with {name} can not be found");
+                }
 
-            return Ok(results);
+                return Ok(results);
+            }
+            catch (TmdbException te)
+            {
+                return BadRequest("Exception occured in 3rd party TMDB: " + te.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         [HttpGet]
         [Route("getMoviesByActorId/{id}")]
         public async Task<ActionResult<List<MoviesByActor>>> GetMoviesByActorId( [FromRoute] int id)
         {
-            var results = await _tmdbApiRequestHandler.GetMoviesByActorId(id);
-            if (results.Count == 0)
+            try
             {
-                return NotFound("Actor can't be found");
-            }
+                var results = await _tmdbApiRequestHandler.GetMoviesByActorId(id);
+                if (results.Count == 0)
+                {
+                    return NotFound($"Actor with {id} can not be found");
+                }
 
-            return Ok(results);
+                return Ok(results);
+            }
+            catch (TmdbException t)
+            {
+                return BadRequest("Error from tmdb with error with statuscode: "+ t.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         [HttpGet]
         [Route("getMostPopularActors")]
-        public async Task<List<Actor>> GetMostPopularActor()
+        public async Task<ActionResult<List<Actor>>> GetMostPopularActor()
         {
-            var results = await _tmdbApiRequestHandler.GetMostPopularActors();
-            return results;
+            try
+            {
+                var results = await _tmdbApiRequestHandler.GetMostPopularActors();
+                return Ok(results);
+            }
+            catch (TmdbException t)
+            {
+                return BadRequest("Error from tmdb with error with statuscode: "+ t.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
       
     }

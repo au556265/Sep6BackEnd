@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Sep6BackEnd.BusinessLogic;
+namespace Sep6BackEnd.BusinessLogic.Logic;
 
 public interface IStatisticHandler
 {

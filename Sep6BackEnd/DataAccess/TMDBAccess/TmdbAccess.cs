@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Sep6BackEnd.Controllers;
-using Sep6BackEnd.DataAccess.IMDBAccess;
+using Sep6BackEnd.DataAccess.DomainClasses.APIModels;
 
 namespace Sep6BackEnd.DataAccess.TMDBAccess
 {
@@ -21,114 +19,250 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         
         public async Task<List<Movie>> GetMovieByTitle(string name)
         {
-            string url = "https://api.themoviedb.org/3/search/movie?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
+            try
+            {
+                string url = "https://api.themoviedb.org/3/search/movie?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
 
-            string response = await client.GetStringAsync(url);
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
 
-            var data = JsonConvert.DeserializeObject<Movie.Root>(response);
+                var response = await httpResponse.Content.ReadAsStringAsync();
+                
+                var data = JsonConvert.DeserializeObject<Movie.Root>(response);
 
-            return data.results;        
+                return data.results;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         public async Task<List<Actor>> GetByActorByName(string name)
         {
-            string url = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
+            try
+            {
+                string url = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                string response = await httpResponse.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Actor.Root>(response);
 
-            string response = await client.GetStringAsync(url);
-
-            var data = JsonConvert.DeserializeObject<Actor.Root>(response);
-
-            return data.results;
+                return data.results;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<PersonDetails> GetActorById(int id)
         {
-            string url = $"https://api.themoviedb.org/3/person/{id}?api_key="+ keys.APIKEY;
-
-            string response = await client.GetStringAsync(url);
-
-            var data = JsonConvert.DeserializeObject<PersonDetails>(response);
-
-            return data;
-        }
-
-        public async Task<List<MoviesByActor>> GetMoviesByActor(string name)
-        {
-            //Getting Actor ID by String Name
-            string Actorurl = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
-            string Actorresponse = await client.GetStringAsync(Actorurl);
-            var ActorData = JsonConvert.DeserializeObject<Actor.Root>(Actorresponse);
-
-            if (ActorData.results.Count == 0)
-            {
-                return new List<MoviesByActor>();
-            }
-            var ActorID = ActorData.results[0].id;
-            
-
-            //Getting list of Movies
-            string url = $"https://api.themoviedb.org/3/person/{ActorID}/movie_credits?api_key="+ keys.APIKEY + $"&language=en-US";
-            string response = await client.GetStringAsync(url);
-            var data = JsonConvert.DeserializeObject<MoviesByActor.Root>(response);
-            return data.cast;
-            
-        }
-
-        public async Task<List<MoviesByActor>> GetMoviesByActorId(int id)
-        {
-            //Getting list of Movies
-            string url = $"https://api.themoviedb.org/3/person/{id}/movie_credits?api_key="+ keys.APIKEY + $"&language=en-US";
             try
             {
-                string response = await client.GetStringAsync(url);
+                string url = $"https://api.themoviedb.org/3/person/{id}?api_key="+ keys.APIKEY;
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                string response = await httpResponse.Content.ReadAsStringAsync();
+
+                var data = JsonConvert.DeserializeObject<PersonDetails>(response);
+
+                return data;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        //How to test this one 
+        public async Task<List<MoviesByActor>> GetMoviesByActor(string name)
+        {
+            try
+            {
+                //Getting Actor ID by String Name
+                string Actorurl = "https://api.themoviedb.org/3/search/person?api_key="+ keys.APIKEY + $"&language=en-US&query={name}&page=1&include_adult=false";
+                HttpResponseMessage httpResponse = await client.GetAsync(Actorurl);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                
+                string Actorresponse = await httpResponse.Content.ReadAsStringAsync();
+                
+                var ActorData = JsonConvert.DeserializeObject<Actor.Root>(Actorresponse);
+
+                if (ActorData.results.Count == 0)
+                {
+                    return new List<MoviesByActor>();
+                }
+                var ActorID = ActorData.results[0].id;
+
+                //Getting list of Movies
+                string url = $"https://api.themoviedb.org/3/person/{ActorID}/movie_credits?api_key="+ keys.APIKEY + $"&language=en-US";
+                HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+
+                string response = await httpResponseMessage.Content.ReadAsStringAsync();
+                
                 var data = JsonConvert.DeserializeObject<MoviesByActor.Root>(response);
                 return data.cast;
             }
             catch (Exception e)
             {
-                return new List<MoviesByActor>();
+                Console.WriteLine(e);
+                throw;
             }
-            
+
+        }
+
+        public async Task<List<MoviesByActor>> GetMoviesByActorId(int id)
+        {
+            //Getting list of Movies
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/person/{id}/movie_credits?api_key="+ keys.APIKEY + $"&language=en-US";
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                string response = await httpResponse.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<MoviesByActor.Root>(response);
+                return data.cast;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<List<Series>> GetMostPopularSeries()
         {
-            string url = $"https://api.themoviedb.org/3/trending/tv/week?api_key="+ keys.APIKEY;
-            string response = await client.GetStringAsync(url);
-            var data = JsonConvert.DeserializeObject<Series.Root>(response);
-            return data.results;
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/trending/tv/week?api_key="+ keys.APIKEY;
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                
+                var response = await httpResponse.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Series.Root>(response);
+                return data.results;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<List<Movie>> GetMostPopularMovies()
         {
-            string url = $"https://api.themoviedb.org/3/trending/movie/week?api_key="+ keys.APIKEY;
-            string response = await client.GetStringAsync(url);
-            var data = JsonConvert.DeserializeObject<Movie.Root>(response);
-            return data.results;
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/trending/movie/week?api_key="+ keys.APIKEY;
+                HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
+                if (!httpResponseMessage.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponseMessage.StatusCode.ToString());
+                }
+
+                var response = await httpResponseMessage.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Movie.Root>(response);
+                return data.results;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+       
         }
 
         public async Task<List<Actor>> GetMostPopularActors()
         {
-            string url = $"https://api.themoviedb.org/3/trending/person/week?api_key="+ keys.APIKEY;
-            string response = await client.GetStringAsync(url);
-            var data = JsonConvert.DeserializeObject<Actor.Root>(response);
-            return data.results;
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/trending/person/week?api_key="+ keys.APIKEY;
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                
+                string response = await httpResponse.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Actor.Root>(response);
+                return data.results;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<Movie> GetMovie(int id)
         {
-            string url = $"https://api.themoviedb.org/3/movie/{id}?api_key="+keys.APIKEY+"&language=en-US";
-            string response = await client.GetStringAsync(url);
-            var data = JsonConvert.DeserializeObject<Movie>(response);
-            return data;
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/movie/{id}?api_key="+keys.APIKEY+"&language=en-US";
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                string response = await httpResponse.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Movie>(response);
+                return data;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
-        public async Task<List<Cast>> GetActorByMovie(int MovieID)
+        public async Task<List<Cast>> GetActorByMovieId(int MovieID)
         {
-            string url = $"https://api.themoviedb.org/3/movie/{MovieID}/credits?api_key="+keys.APIKEY+"&language=en-US";
-            string response = await client.GetStringAsync(url);
-            var data = JsonConvert.DeserializeObject<Cast.Root>(response);
-            return data.cast;
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/movie/{MovieID}/credits?api_key="+keys.APIKEY+"&language=en-US";
+                HttpResponseMessage httpResponse = await client.GetAsync(url);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponse.StatusCode.ToString());
+                }
+                string response = await httpResponse.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Cast.Root>(response);
+                return data.cast;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

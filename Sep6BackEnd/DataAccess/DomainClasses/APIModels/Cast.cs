@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Sep6BackEnd.Controllers
+// TODO 1 file one class
+// TODO - Check comment in Program.cs
+namespace Sep6BackEnd.DataAccess.DomainClasses.APIModels
 {
     public class Cast
     {

@@ -1,4 +1,6 @@
-﻿namespace Sep6BackEnd
+﻿// TODO - Check comment in Program.cs
+
+namespace Sep6BackEnd
 {
     public class Keys
     {

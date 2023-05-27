@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Sep6BackEnd.BusinessLogic;
+using Sep6BackEnd.BusinessLogic.Logic;
+using Sep6BackEnd.DataAccess.DomainClasses.APIModels;
+using Sep6BackEnd.DataAccess.DomainClasses.DatabaseModels;
 
 namespace Sep6BackEnd.Controllers
 {
@@ -10,7 +12,7 @@ namespace Sep6BackEnd.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private IUsersRequestHandler _usersRequestHandler;
+        private readonly IUsersRequestHandler _usersRequestHandler;
         
         public UserController(UsersRequestHandler usersRequestHandler)
         {
@@ -20,64 +22,122 @@ namespace Sep6BackEnd.Controllers
         [HttpPost]
         [Route("postCreateUser/{userName}/{email}/{password}")]
         public async Task<ActionResult<Users>> CreateUser([FromRoute] string userName, string email, string password)
-        { 
-            var results = await _usersRequestHandler.CreateUser(userName, email, password);
-            if (results == null)
+        {
+            try
             {
-                return BadRequest("Email or username is already taken please select something else");
+                var results = await _usersRequestHandler.CreateUser(userName, email, password);
+                Console.WriteLine(results.GetType());
+                
+                return Ok(results);
             }
-
-            return results;
-
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception occured in: " + e.Message );
+                return BadRequest( $"{email} or {userName} is already taken please select something else");
+            }
         }
         
+        //Try Catch not needed
         [HttpGet]
         [Route("login/{userName}/{password}")]
         public async Task<ActionResult<Users>> Login([FromRoute] string userName, string password)
         {
-            var results =await  _usersRequestHandler.Login(userName, password);
-            if (results == null)
+            try
             {
-                return BadRequest("Username or password is wrong");
+                var results =await  _usersRequestHandler.Login(userName, password);
+               if (results == null)
+                {
+                    return NotFound("Username or password is wrong");
+                }
+                
+                return Ok(results);
             }
-            return results;
+            catch (Exception e)
+            { 
+                return BadRequest(e.Message);
+            }
         }
         
+        // TODO handle when Ok and bad
+        // controller 
         [HttpGet]
         [Route("getFavoriteMovie/{userId}/{movieId}")]
-        public async Task<bool> getFavoriteMovie([FromRoute] int userId, int movieId)
+        public async Task<ActionResult<bool>> GetFavoriteMovie([FromRoute] int userId, int movieId)
         {
-            return await _usersRequestHandler.GetFavoriteMovie(userId, movieId);
+            try
+            {
+                var result = await _usersRequestHandler.GetFavoriteMovie(userId, movieId);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Exception occured in: " + e.Message);
+            }
         }
         
+        // TODO handle when Ok and bad
         [HttpPost]
         [Route("setFavoriteMovie")]
-        public async Task<MovieFavorite> SetFavoriteMovie([FromBody] MovieFavorite movieFavorite)
+        public async Task<ActionResult<MovieFavorite>> SetFavoriteMovie([FromBody] MovieFavorite movieFavorite)
         {
-            return await _usersRequestHandler.SetFavoriteMovie(movieFavorite);
+            try
+            {
+                var result = await _usersRequestHandler.SetFavoriteMovie(movieFavorite);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
+        // TODO handle when Ok and bad
         [HttpPost]
         [Route("setMovieRating")]
-        public async Task<MovieRating> SetMovieRating([FromBody] MovieRating movieRating)
+        public async Task<ActionResult<MovieRating>> SetMovieRating([FromBody] MovieRating movieRating)
         {
-            return await _usersRequestHandler.SetMovieRating(movieRating);
+            try
+            {
+                var result = await _usersRequestHandler.SetMovieRating(movieRating);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
+        // TODO handle when Ok and bad
         [HttpGet]
         [Route("getMovieRating/{userId}/{movieId}")]
-        public async Task<int> GetMovieRating([FromRoute] int userId, int movieId)
+        public async Task<ActionResult<int>> GetMovieRating([FromRoute] int userId, int movieId)
         {
-           var rating = await _usersRequestHandler.GetMovieRating(userId,movieId);
-           return rating;
+            try
+            {
+                var rating = await _usersRequestHandler.GetMovieRating(userId,movieId);
+                return Ok(rating);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
+        // TODO handle when Ok and bad
         [HttpGet]
         [Route("getAllMyFavoriteMovies/{userId}")]
-        public async Task<IEnumerable<Movie>> GetAllMyFavoritesMovies(int userId)
+        public async Task<ActionResult<IEnumerable<Movie>>> GetAllMyFavoritesMovies(int userId)
         {
-            var results = await _usersRequestHandler.GetAllMyFavoritesMovies(userId);
-            return results;
+            try
+            {
+                var results = await _usersRequestHandler.GetAllMyFavoritesMovies(userId);
+                return Ok(results);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
     }

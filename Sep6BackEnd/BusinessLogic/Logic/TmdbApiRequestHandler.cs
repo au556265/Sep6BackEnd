@@ -154,6 +154,19 @@ namespace Sep6BackEnd.BusinessLogic.Logic
                 throw;
             }
         }
+        
+        public async Task<List<Movie>> GetMostPopularMoviesByDecade(string releaseDate1, string releaseDate2)
+        {
+            try
+            {
+                return await _tmdbAccess.GetMostPopularMoviesByDecade(releaseDate1,releaseDate2);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
 
         public async Task<List<Actor>> GetMostPopularActors()
         {

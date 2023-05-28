@@ -268,7 +268,31 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
                 throw;
             }
         }
+        
+        public async Task<List<Movie>> GetMostPopularMoviesByDecade(string releaseDate1, string releaseDate2)
+        {
+            try
+            {
+                string url = $"https://api.themoviedb.org/3/discover/movie?api_key="+ keys.APIKEY + 
+                             $"&include_adult=false&include_video=false&language=en-US&page=1&primary_release_date.gte={releaseDate1}" +
+                             $"&primary_release_date.lte={releaseDate2}&vote_count.gte=300&sort_by=vote_average.desc";
+                HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
+                if (!httpResponseMessage.IsSuccessStatusCode)
+                {
+                    throw new TmdbException(httpResponseMessage.StatusCode.ToString());
+                }
 
+                var response = await httpResponseMessage.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<Movie.Root>(response);
+                return data.results;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
         public async Task<List<Actor>> GetMostPopularActors()
         {
             try

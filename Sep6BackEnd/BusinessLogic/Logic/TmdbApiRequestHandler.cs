@@ -155,11 +155,11 @@ namespace Sep6BackEnd.BusinessLogic.Logic
             }
         }
         
-        public async Task<List<Movie>> GetMostPopularMoviesByDecade(string releaseDate1, string releaseDate2)
+        public async Task<List<Movie>> GetMostPopularMoviesByDecade(string startDateForDecade, string endDateForDecade)
         {
             try
             {
-                return await _tmdbAccess.GetMostPopularMoviesByDecade(releaseDate1,releaseDate2);
+                return await _tmdbAccess.GetMostPopularMoviesByDecade(startDateForDecade,endDateForDecade);
             }
             catch (Exception e)
             {

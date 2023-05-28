@@ -269,13 +269,13 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             }
         }
         
-        public async Task<List<Movie>> GetMostPopularMoviesByDecade(string releaseDate1, string releaseDate2)
+        public async Task<List<Movie>> GetMostPopularMoviesByDecade(string startDateForDecade, string endDateForDecade)
         {
             try
             {
                 string url = $"https://api.themoviedb.org/3/discover/movie?api_key="+ keys.APIKEY + 
-                             $"&include_adult=false&include_video=false&language=en-US&page=1&primary_release_date.gte={releaseDate1}" +
-                             $"&primary_release_date.lte={releaseDate2}&vote_count.gte=300&sort_by=vote_average.desc";
+                             $"&include_adult=false&include_video=false&language=en-US&page=1&primary_release_date.gte={startDateForDecade}" +
+                             $"&primary_release_date.lte={endDateForDecade}&vote_count.gte=300&sort_by=vote_average.desc";
                 HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
                 if (!httpResponseMessage.IsSuccessStatusCode)
                 {

@@ -16,7 +16,7 @@ public interface ITmdbApiRequestHandler
     Task<List<Movie>> GetUpcomingMovies();
     Task<List<Movie>> GetTopRatedMovies();
     Task<List<Movie>> GetWeeklyTrendingMovies();
-    Task<List<Movie>> GetMostPopularMoviesByDecade(string releaseDate1, string releaseDate2);
+    Task<List<Movie>> GetMostPopularMoviesByDecade(string startDateForDecade, string endDateForDecade);
     Task<List<Actor>> GetMostPopularActors();
     Task<List<Actor>> GetWeeklyTrendingActors();
     Task<Movie> GetMovie(int id);

@@ -133,12 +133,12 @@ namespace Sep6BackEnd.Controllers
         }
         
         [HttpGet]
-        [Route("MostPopularMoviesByDecade&{releaseDate1}&{releaseDate2}")]
-        public async Task<ActionResult<List<Movie>>> GetMostPopularMoviesByDecade(string releaseDate1, string releaseDate2)
+        [Route("MostPopularMoviesByDecade&{startDateForDecade}&{endDateForDecade}")]
+        public async Task<ActionResult<List<Movie>>> GetMostPopularMoviesByDecade(string startDateForDecade, string endDateForDecade)
         {
             try
             {
-                return Ok(await _tmdbApiRequestHandler.GetMostPopularMoviesByDecade(releaseDate1,releaseDate2));
+                return Ok(await _tmdbApiRequestHandler.GetMostPopularMoviesByDecade(startDateForDecade,endDateForDecade));
             }
             catch (TmdbException t)
             {

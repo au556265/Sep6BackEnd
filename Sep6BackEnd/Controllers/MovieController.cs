@@ -133,6 +133,24 @@ namespace Sep6BackEnd.Controllers
         }
         
         [HttpGet]
+        [Route("MostPopularMoviesByDecade&{startDateForDecade}&{endDateForDecade}")]
+        public async Task<ActionResult<List<Movie>>> GetMostPopularMoviesByDecade(string startDateForDecade, string endDateForDecade)
+        {
+            try
+            {
+                return Ok(await _tmdbApiRequestHandler.GetMostPopularMoviesByDecade(startDateForDecade,endDateForDecade));
+            }
+            catch (TmdbException t)
+            {
+                return BadRequest("Error from tmdb with error with statuscode: "+ t.Message); 
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error" + e);
+            }
+        }
+        
+        [HttpGet]
         [Route("getActorsByMovie/{id}")]
         public async Task<ActionResult<List<Cast>>> GetActorsByMovieId(int id)
         {

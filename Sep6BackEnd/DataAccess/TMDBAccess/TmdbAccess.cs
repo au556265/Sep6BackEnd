@@ -16,7 +16,13 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             client = new HttpClient();
             this.keys = keys;
         }
-        
+
+        public TmdbAccess(HttpClient client, Keys keys)
+        {
+            this.keys = keys;
+            this.client = client;
+        }
+
         public async Task<List<Movie>> GetMovieByTitle(string name)
         {
             try
@@ -162,7 +168,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         {
             try
             {
-                string url = $"https://api.themoviedb.org/3/trending/tv/week?api_key="+ keys.APIKEY;
+                string url = $"https://api.themoviedb.org/3/trending/tv/week?api_key="+ keys.APIKEY + $"&language=en-US";
                 HttpResponseMessage httpResponse = await client.GetAsync(url);
                 if (!httpResponse.IsSuccessStatusCode)
                 {
@@ -185,7 +191,7 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
         {
             try
             {
-                string url = $"https://api.themoviedb.org/3/movie/popular?api_key="+ keys.APIKEY;
+                string url = $"https://api.themoviedb.org/3/movie/popular?api_key="+ keys.APIKEY + $"&language=en-US&page=1";
                 HttpResponseMessage httpResponseMessage = await client.GetAsync(url);
                 if (!httpResponseMessage.IsSuccessStatusCode)
                 {

@@ -12,5 +12,10 @@ namespace Sep6BackEnd
             APIKEY = apiKey;
             DBSKEY = dbConnection;
         }
+
+        public Keys()
+        {
+            
+        }
     }
 }

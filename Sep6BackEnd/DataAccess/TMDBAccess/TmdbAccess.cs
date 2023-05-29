@@ -16,7 +16,12 @@ namespace Sep6BackEnd.DataAccess.TMDBAccess
             client = new HttpClient();
             this.keys = keys;
         }
-        
+
+        public TmdbAccess(HttpClient client)
+        {
+            this.client = client;
+        }
+
         public async Task<List<Movie>> GetMovieByTitle(string name)
         {
             try

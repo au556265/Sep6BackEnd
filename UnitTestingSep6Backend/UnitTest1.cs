@@ -17,10 +17,9 @@ public class UnitTest1
         var keyProvider = Substitute.For<Keys>();
 
         
-
         //Arrange 
         var mocketHttpClient = Substitute.For<HttpClient>();
-        var mocketTmdbAccess = new TmdbAccess(mocketHttpClient);
+        var mocketTmdbAccess = new TmdbAccess(mocketHttpClient, keyProvider);
         
         //Act
         int invalidMovieID = 76600111;
@@ -32,28 +31,19 @@ public class UnitTest1
     [Fact]
     public async Task GetMovieByValidIdTest()
     {
-
         var keyProvider = Substitute.For<Keys>();
-
-        //Arrange 
-        var mocketHttpClient = Substitute.For<HttpClient>();
-        
+        //Arrange
         //Mocking the API response
         Movie avatar = new Movie
         {
             title = "Avatar: The Way of Water"
         };
 
-        var httpResponse = new HttpResponseMessage(HttpStatusCode.OK)
-        {
-            Content = new StringContent(JsonConvert.SerializeObject(avatar), Encoding.UTF8, "application/json")
-        };
+        var messageHandler = new MockHttpMessageHandler(JsonConvert.SerializeObject(avatar), HttpStatusCode.OK);
+        var mocketHttpClient = new HttpClient(messageHandler);
 
-        mocketHttpClient.BaseAddress = new Uri($"https://api.themoviedb.org");
-
-        var test = mocketHttpClient.GetAsync(Arg.Any<string>()).Returns(httpResponse);
         int id = 76600;
-        var mocketTmdbAccess = Substitute.For<TmdbAccess>(mocketHttpClient);
+        var mocketTmdbAccess = new TmdbAccess(mocketHttpClient, keyProvider);
         //Act
         var result = await mocketTmdbAccess.GetMovie(id);
 

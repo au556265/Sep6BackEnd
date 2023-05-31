@@ -1,6 +1,10 @@
 ﻿using System.Net;
 
 namespace UnitTestingSep6Backend;
+/*
+ * The class MockHttpMessageHandler is taken from following website:
+ * https://dev.to/n_develop/mocking-the-httpclient-in-net-core-with-nsubstitute-k4j 
+ */
 
 public class MockHttpMessageHandler: HttpMessageHandler
 {

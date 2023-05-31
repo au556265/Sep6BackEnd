@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text;
 using Newtonsoft.Json;
 using NSubstitute;
 using Sep6BackEnd;
@@ -8,32 +7,31 @@ using Sep6BackEnd.DataAccess.TMDBAccess;
 
 namespace UnitTestingSep6Backend;
 
-public class UnitTest1
+public class TmdbAccesUnitTest
 {
-  
     [Fact]
-    public void GetMovieByInvalidIdTest()
+    public void TmdbAcces_WhenRequstingInvalidMovie_ShouldThrow()
     {
         var keyProvider = Substitute.For<Keys>();
-
         
         //Arrange 
-        var mocketHttpClient = Substitute.For<HttpClient>();
-        var mocketTmdbAccess = new TmdbAccess(mocketHttpClient, keyProvider);
+        var messageHandler = new MockHttpMessageHandler("", HttpStatusCode.NotFound);
+        var mocketHttpClient = new HttpClient(messageHandler);
+        var tmdbAccess = new TmdbAccess(mocketHttpClient, keyProvider);
         
         //Act
         int invalidMovieID = 76600111;
 
         //Assert
-        Assert.ThrowsAsync<TmdbException>(() => mocketTmdbAccess.GetMovie(invalidMovieID));
+        Assert.ThrowsAsync<TmdbException>(() => tmdbAccess.GetMovie(invalidMovieID));
     }
     
     [Fact]
     public async Task GetMovieByValidIdTest()
     {
         var keyProvider = Substitute.For<Keys>();
+        
         //Arrange
-        //Mocking the API response
         Movie avatar = new Movie
         {
             title = "Avatar: The Way of Water"
@@ -43,9 +41,10 @@ public class UnitTest1
         var mocketHttpClient = new HttpClient(messageHandler);
 
         int id = 76600;
-        var mocketTmdbAccess = new TmdbAccess(mocketHttpClient, keyProvider);
+        var tmdbAccess = new TmdbAccess(mocketHttpClient, keyProvider);
+        
         //Act
-        var result = await mocketTmdbAccess.GetMovie(id);
+        var result = await tmdbAccess.GetMovie(id);
 
         //Assert
         Assert.Equal("Avatar: The Way of Water", result.title);
